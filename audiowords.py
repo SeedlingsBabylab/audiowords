@@ -280,9 +280,13 @@ class MainWindow:
 
     def export_overlaps(self):
 
-        self.overlaps_export_file = tkFileDialog.asksaveasfilename()
+        overlaps_export_file = tkFileDialog.asksaveasfilename()
 
-        with open(self.overlaps_export_file, "w") as file:
+        ClanFileParser(self.clan_file, overlaps_export_file).\
+                        insert_overlaps(self.overlaps.ranked_meaningful,
+                                        self.overlaps.meaningful_map)
+        dummy = "/Users/andreiamatuni/trash.txt"
+        with open(dummy, "w") as file:
             size = len(self.overlaps.ranked_ctc_actual)
             interval = None
             file.write("\"density\",\"interval\",\"source\"\n")
