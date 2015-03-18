@@ -285,38 +285,38 @@ class MainWindow:
         ClanFileParser(self.clan_file, overlaps_export_file).\
                         insert_overlaps(self.overlaps.ranked_meaningful,
                                         self.overlaps.meaningful_map)
-        dummy = "/Users/andreiamatuni/trash.txt"
-        with open(dummy, "w") as file:
-            size = len(self.overlaps.ranked_ctc_actual)
-            interval = None
-            file.write("\"density\",\"interval\",\"source\"\n")
-            for index, x in enumerate(self.overlaps.ranked_ctc_actual):
-                for key, value in self.overlaps.ctc_actual_map.items():
-                    if value == x:
-                        interval = key
-                        print interval
-                file.write(str(self.overlaps.ranked_ctc_actual[index]) +","+str(interval)+","+"CTC\n")
 
-            for index, x in enumerate(self.overlaps.ranked_awc_actual):
-                for key, value in self.overlaps.awc_actual_map.items():
-                    if value == x:
-                        interval = key
-                        print interval
-                file.write(str(self.overlaps.ranked_awc_actual[index]) +","+str(interval)+","+"AWC\n")
-
-            for index, x in enumerate(self.overlaps.ranked_cvc_actual):
-                for key, value in self.overlaps.cvc_actual_map.items():
-                    if value == x:
-                        interval = key
-                        print interval
-                file.write(str(self.overlaps.ranked_cvc_actual[index]) +","+str(interval)+","+"CVC\n")
-
-            for index, x in enumerate(self.overlaps.ranked_meaningful):
-                for key, value in self.overlaps.meaningful_map.items():
-                    if value == x:
-                        interval = key
-                        print interval
-                file.write(str(self.overlaps.ranked_meaningful[index]) +","+str(interval)+","+"Meaningful\n")
+        #with open(dummy, "w") as file:
+            # size = len(self.overlaps.ranked_ctc_actual)
+            # interval = None
+            # file.write("\"density\",\"interval\",\"source\"\n")
+            # for index, x in enumerate(self.overlaps.ranked_ctc_actual):
+            #     for key, value in self.overlaps.ctc_actual_map.items():
+            #         if value == x:
+            #             interval = key
+            #             print interval
+            #     file.write(str(self.overlaps.ranked_ctc_actual[index]) +","+str(interval)+","+"CTC\n")
+            #
+            # for index, x in enumerate(self.overlaps.ranked_awc_actual):
+            #     for key, value in self.overlaps.awc_actual_map.items():
+            #         if value == x:
+            #             interval = key
+            #             print interval
+            #     file.write(str(self.overlaps.ranked_awc_actual[index]) +","+str(interval)+","+"AWC\n")
+            #
+            # for index, x in enumerate(self.overlaps.ranked_cvc_actual):
+            #     for key, value in self.overlaps.cvc_actual_map.items():
+            #         if value == x:
+            #             interval = key
+            #             print interval
+            #     file.write(str(self.overlaps.ranked_cvc_actual[index]) +","+str(interval)+","+"CVC\n")
+            #
+            # for index, x in enumerate(self.overlaps.ranked_meaningful):
+            #     for key, value in self.overlaps.meaningful_map.items():
+            #         if value == x:
+            #             interval = key
+            #             print interval
+            #     file.write(str(self.overlaps.ranked_meaningful[index]) +","+str(interval)+","+"Meaningful\n")
 
 if __name__ == "__main__":
 
