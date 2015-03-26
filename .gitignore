@@ -3,3 +3,4 @@
 *.pyc
 export/
 .idea/
+*.DS_Store

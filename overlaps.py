@@ -12,16 +12,19 @@ class Overlaps:
         self.awc_actual_regions = None
         self.ctc_actual_regions = None
         self.cvc_actual_regions = None
+        self.ctc_cvc_regions = None
 
         self.meaningful_map = None
         self.awc_actual_map = None
         self.ctc_actual_map = None
         self.cvc_actual_map = None
+        self.ctc_cvc_map = None
 
         self.ranked_meaningful = None
         self.ranked_awc_actual = None
         self.ranked_ctc_actual = None
         self.ranked_cvc_actual = None
+        self.ranked_ctc_cvc = None
 
         self.load_data(lena_file)
 
@@ -129,24 +132,27 @@ class Overlaps:
 
         x = 0
         y = 12
-        buffer = self.dataset.data[x:y]
+        hour_buffer = self.dataset.data[x:y]
 
         while y <= len(self.dataset.data):
             meaningful_sum = 0
             awc_actual_sum = 0
             ctc_actual_sum = 0
             cvc_actual_sum = 0
+            ctc_cvc_sum = 0
 
-            for count in buffer:
-                meaningful_sum = meaningful_sum + count[0]
-                awc_actual_sum = awc_actual_sum + count[1]
-                ctc_actual_sum = ctc_actual_sum + count[2]
-                cvc_actual_sum = cvc_actual_sum + count[3]
+            for count in hour_buffer:
+                meaningful_sum += count[0]
+                awc_actual_sum += count[1]
+                ctc_actual_sum += count[2]
+                cvc_actual_sum += count[3]
+                ctc_cvc_sum += (ctc_actual_sum + cvc_actual_sum)/2  # the average between ctc and cvc
 
             meaningful_ratio = float(meaningful_sum)/12
             awc_actual_ratio = float(awc_actual_sum)/12
             ctc_actual_ratio = float(ctc_actual_sum)/12
             cvc_actual_ratio = float(cvc_actual_sum)/12
+            ctc_cvc_ratio = float(ctc_cvc_sum)/12
 
             print
             print
@@ -160,7 +166,8 @@ class Overlaps:
             regions.append((meaningful_ratio,
                             awc_actual_ratio,
                             ctc_actual_ratio,
-                            cvc_actual_ratio))
+                            cvc_actual_ratio,
+                            ctc_cvc_ratio))
 
             # push the buffer slice over to the right by one element
             # and re-slice
@@ -172,10 +179,9 @@ class Overlaps:
             #               \     \-->
             #                -----
 
-            x = x + 1 # bump
-            y = y + 1 # bump
-            buffer = self.dataset.data[x:y] # re-slice
-
+            x += 1  # bump
+            y += 1  # bump
+            hour_buffer = self.dataset.data[x:y]  # re-slice
 
         self.meaningful_regions = [average[0] for average in regions]
         print self.meaningful_regions
@@ -185,18 +191,20 @@ class Overlaps:
         print self.ctc_actual_regions
         self.cvc_actual_regions = [average[3] for average in regions]
         print self.cvc_actual_regions
-
+        self.ctc_cvc_regions = [average[4] for average in regions]
+        print self.ctc_cvc_regions
 
         self.meaningful_map, self.ranked_meaningful = self.rank_list(self.meaningful_regions, self.top_n)
         self.awc_actual_map, self.ranked_awc_actual = self.rank_list(self.awc_actual_regions, self.top_n)
         self.ctc_actual_map, self.ranked_ctc_actual = self.rank_list(self.ctc_actual_regions, self.top_n)
         self.cvc_actual_map, self.ranked_cvc_actual = self.rank_list(self.cvc_actual_regions, self.top_n)
+        self.ctc_cvc_map, self.ranked_ctc_cvc = self.rank_list(self.ctc_cvc_regions, self.top_n)
 
         print "ranked_meaningful: " + str(self.ranked_meaningful)
         print "ranked awc: " + str(self.ranked_awc_actual)
         print "ranked ctc: " + str(self.ranked_ctc_actual)
         print "ranked cvc: " + str(self.ranked_cvc_actual)
-
+        print "ranked ctc_cvc: " + str(self.ranked_ctc_cvc)
 
         print
         print
@@ -271,7 +279,7 @@ class Overlaps:
             temp = int(x * factor)
             temp = float(temp)/factor
             list[index] = temp
-        print "presicion reset list: " + str(list)
+        print "precision reset list: " + str(list)
         return list
 
     def density_to_time(self, region_map, ranked_list):
@@ -314,16 +322,5 @@ class WordDensitySet:
         """
 
         return self.data[time]
-
-#    def hours(self):
- #       """
-
-  #      :return: tuple containing number of full hours and remaining 5 minute chunks
-   #                 e.g: (4, 6) = 4 hours + 6*5 minutes
-    #    """
-     #   hours = len(self.data) / 12
-      #  remainder = len(self.data) % 12
-       # print "hours(): " + str(hours) + " " + str(remainder)
-        #return (hours, remainder)
 
 

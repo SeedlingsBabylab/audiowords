@@ -39,7 +39,7 @@ class MainWindow:
 
         self.load_clan_button = Button(self.main_frame,
                                        text = "Load Clan File",
-                                       command = self.load_clan)
+                                       command=self.load_clan)
 
         self.load_lena_button = Button(self.main_frame,
                                        text="Load Lena",
@@ -283,8 +283,8 @@ class MainWindow:
         overlaps_export_file = tkFileDialog.asksaveasfilename()
 
         ClanFileParser(self.clan_file, overlaps_export_file).\
-                        insert_overlaps(self.overlaps.ranked_meaningful,
-                                        self.overlaps.meaningful_map)
+                        insert_overlaps(self.overlaps.ranked_ctc_cvc,
+                                        self.overlaps.ctc_cvc_map)
 
         #with open(dummy, "w") as file:
             # size = len(self.overlaps.ranked_ctc_actual)
