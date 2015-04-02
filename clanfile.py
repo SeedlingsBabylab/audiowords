@@ -11,6 +11,8 @@ class ClanFileParser:
         self.overlaps_inserted = False
 
 
+
+
     def insert_silences(self, silences):
 
         # we initialize a queue of silences using the
@@ -152,7 +154,7 @@ class ClanFileParser:
         output.close()
 
 
-    def insert_overlaps(self, region_values, region_map):
+    def insert_overlaps(self, region_values, region_map, silences):
 
         region_number = 1
 
@@ -173,7 +175,9 @@ class ClanFileParser:
         # we initialize a queue of regions using the
         # list built from the region_map lookup. We don't
         # use the list itself because we need queue behavior (i.e. pop)
+        # We also build a queue for the silence regions
         region_queue = deque(sorted_offsets)
+        silence_queue = deque(silences)
 
         print
         print
@@ -205,14 +209,19 @@ class ClanFileParser:
             # interval from each line
             interval_regx = re.compile("(\d+_\d+)")
 
-            # pop the first silence off the queue
+            # pop the first silence and region off the queue
             curr_region = region_queue.popleft()
             curr_region_start = curr_region * 5 * 60 * 60 # convert to milliseconds
             curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
+            curr_silence = silence_queue.popleft()
 
-            #initialize the start/end written flags
+            # initialize the start/end written flags
             start_written = False
             end_written = False
+
+            # initialize the silence/subregion overlap flags
+            region_start_in_silence = False
+            region_end_in_silence = False
 
             # We iterate over the clan file line by line
             for raw_line in file:
@@ -242,74 +251,144 @@ class ClanFileParser:
                     if current_clan_interval[1] < current_clan_interval[0]:
                         raise Exception("timestamp interval is malformed: {}_{}".format(interval[0],
                                                                                         interval[1]))
+                    if (curr_region_start > curr_silence.start) and\
+                            (curr_region_start < curr_silence.end):
+                        region_start_in_silence = True
+
+                    if (curr_region_end < curr_silence.end) and\
+                            (curr_region_end > curr_silence.start):
+                        region_end_in_silence = True
 
                     # If the currently queued silence starts before the
                     # end of the current clan interval, and start silence has
                     # not been written, we...
                     if curr_region_start <= current_clan_interval[1]\
                             and not start_written:
+                        if region_start_in_silence or region_end_in_silence:
 
-                        # alter the ending timestamp to correspond to the beginning
-                        # of the silence, and write the new line to the output file
-                        output.write(line.replace(interval_string,
-                                                  str(current_clan_interval[0]) + "_" +\
-                                                  str(int(curr_region_start))) + "\n")
+                            # alter the ending timestamp to correspond to the beginning
+                            # of the silence, and write the new line to the output file
+                            output.write(line.replace(interval_string,
+                                                      str(current_clan_interval[0]) + "_" + \
+                                                      str(int(curr_region_start))) + "\n")
 
-                        # insert the comment immediately after the altered clan entry
-                        output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
-                                     .format(region_number,
-                                             len(region_values),
-                                             curr_region_start,
-                                             current_clan_interval[1]))
+                            # insert the comment immediately after the altered clan entry
+                            output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}]\n"\
+                                         .format(region_number,
+                                                 len(region_values),
+                                                 curr_region_start,
+                                                 current_clan_interval[1],
+                                                 curr_silence.start,
+                                                 curr_silence.end))
 
-                        start_written = True
-                        end_written = False
+                            start_written = True
+                            end_written = False
 
-                        # stop progressing though the conditions and
-                        # head to next line in the file
-                        continue
+                            # stop progressing though the conditions and
+                            # head to next line in the file
+                            continue
+                        else:
+                            # alter the ending timestamp to correspond to the beginning
+                            # of the silence, and write the new line to the output file
+                            output.write(line.replace(interval_string,
+                                                      str(current_clan_interval[0]) + "_" +\
+                                                      str(int(curr_region_start))) + "\n")
+
+                            # insert the comment immediately after the altered clan entry
+                            output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
+                                         .format(region_number,
+                                                 len(region_values),
+                                                 curr_region_start,
+                                                 current_clan_interval[1]))
+
+                            start_written = True
+                            end_written = False
+
+                            # stop progressing though the conditions and
+                            # head to next line in the file
+                            continue
 
                     # If the end of the currently queued silence is less than
                     # the end of the current clan time interval...
                     if curr_region_end <= current_clan_interval[1]\
                             and start_written\
                             and not end_written:
+                        if region_start_in_silence or region_end_in_silence:
+                            # We first alter the clan time interval to match the end of the
+                            # silence we are about to insert, and write it to the output file
+                            output.write(line.replace(interval_string,
+                                                      str(current_clan_interval[0]) + "_" + \
+                                                      str(int(curr_region_end))) + "\n")
 
-                        # We first alter the clan time interval to match the end of the
-                        # silence we are about to insert, and write it to the output file
-                        output.write(line.replace(interval_string,
-                                                  str(current_clan_interval[0]) + "_" +\
-                                                  str(int(curr_region_end))) + "\n")
+                            # then we write the end silence comment right afterwards
+                            output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}]\n"
+                                         .format(region_number,
+                                                 len(region_values),
+                                                 curr_region_end,
+                                                 current_clan_interval[1],
+                                                 curr_silence.start,
+                                                 curr_silence.end))
 
-                        # then we write the end silence comment right afterwards
-                        output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
-                                     .format(region_number,
-                                             len(region_values),
-                                             curr_region_end,
-                                             current_clan_interval[1]))
-
-                        end_written = True
-                        start_written = False
+                            end_written = True
+                            start_written = False
 
 
 
-                        # make sure queue contains items
-                        # and pop the next silence off of it
-                        if region_queue:
-                            curr_region = region_queue.popleft()
-                            curr_region_start = curr_region * 5 * 60 * 60 # convert to milliseconds
-                            curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
-                            region_number = region_number + 1
+                            # make sure queue contains items
+                            # and pop the next silence off of it
+                            if region_queue:
+                                curr_region = region_queue.popleft()
+                                curr_region_start = curr_region * 5 * 60 * 60 # convert to milliseconds
+                                curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
+                                region_number = region_number + 1
+                            else:
+                                # if silence_queue is empty, we set curr_silence to None
+                                # so that the top level check fails
+                                # (if line.startswith("*") and curr_silence:)
+                                # this ensures that after all the silences have been handled,
+                                # we just write all subsequent lines to output without any
+                                # further processing
+                                curr_region = None
+                            continue
                         else:
-                            # if silence_queue is empty, we set curr_silence to None
-                            # so that the top level check fails
-                            # (if line.startswith("*") and curr_silence:)
-                            # this ensures that after all the silences have been handled,
-                            # we just write all subsequent lines to output without any
-                            # further processing
-                            curr_region = None
-                        continue
+                            # We first alter the clan time interval to match the end of the
+                            # silence we are about to insert, and write it to the output file
+                            output.write(line.replace(interval_string,
+                                                      str(current_clan_interval[0]) + "_" +\
+                                                      str(int(curr_region_end))) + "\n")
 
+                            # then we write the end silence comment right afterwards
+                            output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
+                                         .format(region_number,
+                                                 len(region_values),
+                                                 curr_region_end,
+                                                 current_clan_interval[1]))
+
+                            end_written = True
+                            start_written = False
+
+
+
+                            # make sure queue contains items
+                            # and pop the next silence off of it
+                            if region_queue:
+                                curr_region = region_queue.popleft()
+                                curr_region_start = curr_region * 5 * 60 * 60 # convert to milliseconds
+                                curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
+                                region_number = region_number + 1
+                            else:
+                                # if silence_queue is empty, we set curr_silence to None
+                                # so that the top level check fails
+                                # (if line.startswith("*") and curr_silence:)
+                                # this ensures that after all the silences have been handled,
+                                # we just write all subsequent lines to output without any
+                                # further processing
+                                curr_region = None
+                            continue
+
+
+                if current_clan_interval[1] >= curr_silence.end:
+                    curr_silence = silence_queue.popleft()
                 # this is a check for a special case. If we've reached @End,
                 # but the end of a silence has not been written, we insert that
                 # last end-silence comment in before writing out the @End line

@@ -284,7 +284,7 @@ class MainWindow:
 
         ClanFileParser(self.clan_file, overlaps_export_file).\
                         insert_overlaps(self.overlaps.ranked_ctc_cvc,
-                                        self.overlaps.ctc_cvc_map)
+                                        self.overlaps.ctc_cvc_map, self.silence_parser.silences)
 
         #with open(dummy, "w") as file:
             # size = len(self.overlaps.ranked_ctc_actual)
