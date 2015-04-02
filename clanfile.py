@@ -215,6 +215,10 @@ class ClanFileParser:
             curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
             curr_silence = silence_queue.popleft()
 
+            print "curr_region: " + str(curr_region)
+            print "curr_region_start: " + str(curr_region_start)
+            print "curr_region_end: " + str(curr_region_end)
+
             # initialize the start/end written flags
             start_written = False
             end_written = False
@@ -232,7 +236,7 @@ class ClanFileParser:
                 # We only write comments after lines with " *XYZ: " prefixes.
                 # The check for curr_silence ensures that there is still a
                 # silence waiting to be written
-                if line.startswith("*") and curr_region:
+                if line.startswith("*") and (curr_region is not None):
                     # parse out the part of the line with the interval in it
                     interval_string = interval_regx.search(line).group()
                     # tokenize that string into an array of 2 strings ["123", "456"]
@@ -245,6 +249,12 @@ class ClanFileParser:
                     current_clan_interval[0] = int(interval[0])
                     current_clan_interval[1] = int(interval[1])
 
+                    print "clan[0]: " + str(current_clan_interval[0]) + "clan[1]: " + str(current_clan_interval[1]) + "    curr_region_start: " + str(curr_region_start)
+
+
+                    # Handle special case for 0 offset
+                    if curr_region_start == 0:
+                        curr_region_start = 1 # avoid 0 millisecond. start at 1 millisecond.
                     # We check to make sure that in interval ABC_XYZ,
                     # XYZ is strictly > ABC. If not we print warning to
                     # GUI and raise exception, halting the clan file processing
@@ -308,19 +318,19 @@ class ClanFileParser:
                             # head to next line in the file
                             continue
 
-                    # If the end of the currently queued silence is less than
+                    # If the end of the currently queued subregion is less than
                     # the end of the current clan time interval...
                     if curr_region_end <= current_clan_interval[1]\
                             and start_written\
                             and not end_written:
                         if region_start_in_silence or region_end_in_silence:
                             # We first alter the clan time interval to match the end of the
-                            # silence we are about to insert, and write it to the output file
+                            # subregion we are about to insert, and write it to the output file
                             output.write(line.replace(interval_string,
                                                       str(current_clan_interval[0]) + "_" + \
                                                       str(int(curr_region_end))) + "\n")
 
-                            # then we write the end silence comment right afterwards
+                            # then we write the end subregion comment right afterwards
                             output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}]\n"
                                          .format(region_number,
                                                  len(region_values),
@@ -342,10 +352,10 @@ class ClanFileParser:
                                 curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
                                 region_number = region_number + 1
                             else:
-                                # if silence_queue is empty, we set curr_silence to None
+                                # if region_queue is empty, we set curr_region to None
                                 # so that the top level check fails
                                 # (if line.startswith("*") and curr_silence:)
-                                # this ensures that after all the silences have been handled,
+                                # this ensures that after all the subregions have been handled,
                                 # we just write all subsequent lines to output without any
                                 # further processing
                                 curr_region = None
@@ -357,7 +367,7 @@ class ClanFileParser:
                                                       str(current_clan_interval[0]) + "_" +\
                                                       str(int(curr_region_end))) + "\n")
 
-                            # then we write the end silence comment right afterwards
+                            # then we write the end subbregion comment right afterwards
                             output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
                                          .format(region_number,
                                                  len(region_values),
@@ -370,7 +380,7 @@ class ClanFileParser:
 
 
                             # make sure queue contains items
-                            # and pop the next silence off of it
+                            # and pop the next subregion off of it
                             if region_queue:
                                 curr_region = region_queue.popleft()
                                 curr_region_start = curr_region * 5 * 60 * 60 # convert to milliseconds
