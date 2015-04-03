@@ -11,7 +11,7 @@ class MainWindow:
 
         self.root = master                  # main GUI context
         self.root.title("AudioWords")       # title of window
-        self.root.geometry("1000x400")       # size of GUI window
+        self.root.geometry("1250x400")       # size of GUI window
         self.main_frame = Frame(root)       # main frame into which all the Gui components will be placed
         self.main_frame.pack()              # pack() basically sets up/inserts the element (turns it on)
 
@@ -105,17 +105,20 @@ class MainWindow:
         self.silence_list_box.grid(row=1, column=0)
 
         # declare and load the box for the word density overlap functions
-        self.meaningful_region_box = Listbox(self.main_frame, width=24, height=12)
+        self.meaningful_region_box = Listbox(self.main_frame, width=32, height=12)
         self.meaningful_region_box.grid(row= 1, column=2)
 
-        self.awc_region_box = Listbox(self.main_frame, width=24, height=12)
+        self.awc_region_box = Listbox(self.main_frame, width=32, height=12)
         self.awc_region_box.grid(row=1, column=3)
 
-        self.ctc_region_box = Listbox(self.main_frame, width=24, height=12)
+        self.ctc_region_box = Listbox(self.main_frame, width=32, height=12)
         self.ctc_region_box.grid(row=1, column=4)
 
-        self.cvc_region_box = Listbox(self.main_frame, width=24, height=12)
+        self.cvc_region_box = Listbox(self.main_frame, width=32, height=12)
         self.cvc_region_box.grid(row=1, column=5)
+
+        self.ctc_cvc_box = Listbox(self.main_frame, width=32, height=12)
+        self.ctc_cvc_box.grid(row=1, column=6)
 
         # declare and grid all the labels for the density boxes
 
@@ -130,6 +133,9 @@ class MainWindow:
 
         self.cvc_label = Label(self.main_frame, text="CVC")
         self.cvc_label.grid(row=0, column=5)
+
+        self.ctc_cvc_label = Label(self.main_frame, text="CTC/CVC")
+        self.ctc_cvc_label.grid(row=0, column=6)
 
     def load_regions(self):
 
@@ -255,16 +261,34 @@ class MainWindow:
             self.overlaps = Overlaps(self.lena_file, int(self.top_n_region_entry.get()))
 
             for index, x in enumerate(self.overlaps.ranked_meaningful):
-                self.meaningful_region_box.insert(index, str(x))
+                self.meaningful_region_box.insert(index,
+                                                  str(x) + " - " + \
+                                                  self.offset_to_hour(self.offset_lookup(x, self.overlaps.meaningful_map)) + " - " + \
+                                                  str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.meaningful_map))) + "ms ")
 
             for index, x in enumerate(self.overlaps.ranked_awc_actual):
-                self.awc_region_box.insert(index, str(x))
+                self.awc_region_box.insert(index,
+                                           str(x) + " - " + \
+                                           self.offset_to_hour(self.offset_lookup(x, self.overlaps.awc_actual_map)) + " - " + \
+                                           str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.awc_actual_map))) + "ms ")
 
             for index, x in enumerate(self.overlaps.ranked_ctc_actual):
-                self.ctc_region_box.insert(index, str(x))
+                self.ctc_region_box.insert(index,
+                                           str(x) + " - " + \
+                                           self.offset_to_hour(self.offset_lookup(x, self.overlaps.ctc_actual_map)) + " - " + \
+                                           str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.ctc_actual_map))) + "ms ")
 
             for index, x in enumerate(self.overlaps.ranked_cvc_actual):
-                self.cvc_region_box.insert(index, str(x))
+                self.cvc_region_box.insert(index,
+                                           str(x) + " - " + \
+                                           self.offset_to_hour(self.offset_lookup(x, self.overlaps.cvc_actual_map)) + " - " + \
+                                           str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.cvc_actual_map))) + "ms ")
+
+            for index, x in enumerate(self.overlaps.ranked_ctc_cvc):
+                self.ctc_cvc_box.insert(index,
+                                        str(x) + " - " +\
+                                        self.offset_to_hour(self.offset_lookup(x, self.overlaps.ctc_cvc_map)) + " - " +\
+                                        str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.ctc_cvc_map))) + "ms ")
 
     def clear_lena(self):
         self.top_n_region_entry.delete(0, END)
@@ -285,6 +309,27 @@ class MainWindow:
         ClanFileParser(self.clan_file, overlaps_export_file).\
                         insert_overlaps(self.overlaps.ranked_ctc_cvc,
                                         self.overlaps.ctc_cvc_map, self.silence_parser.silences)
+
+    def offset_to_hour(self, offset):
+
+        hours = offset / 12
+        minutes = 5 * (offset % 12)
+
+        if minutes < 10:
+            return "{}:0{}".format(hours, minutes)
+        else:
+            return "{}:{}".format(hours, minutes)
+
+    def offset_to_millisecond(self, offset):
+
+        return 5 * offset * 60 * 1000
+
+    def offset_lookup(self, average, map):
+
+        for key, value in map.iteritems():
+            if value == average:
+                return key
+
 
         #with open(dummy, "w") as file:
             # size = len(self.overlaps.ranked_ctc_actual)

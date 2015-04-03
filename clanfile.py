@@ -249,7 +249,7 @@ class ClanFileParser:
                     current_clan_interval[0] = int(interval[0])
                     current_clan_interval[1] = int(interval[1])
 
-                    print "clan[0]: " + str(current_clan_interval[0]) + "clan[1]: " + str(current_clan_interval[1]) + "    curr_region_start: " + str(curr_region_start)
+                    #print "clan[0]: " + str(current_clan_interval[0]) + "clan[1]: " + str(current_clan_interval[1]) + "    curr_region_start: " + str(curr_region_start)
 
 
                     # Handle special case for 0 offset

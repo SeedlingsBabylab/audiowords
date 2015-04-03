@@ -146,7 +146,7 @@ class Overlaps:
                 awc_actual_sum += count[1]
                 ctc_actual_sum += count[2]
                 cvc_actual_sum += count[3]
-                ctc_cvc_sum += (ctc_actual_sum + cvc_actual_sum)/2  # the average between ctc and cvc
+                ctc_cvc_sum += float((count[2] + count[3]))/2  # the average between ctc and cvc
 
             meaningful_ratio = float(meaningful_sum)/12
             awc_actual_ratio = float(awc_actual_sum)/12
@@ -162,6 +162,7 @@ class Overlaps:
             print "   awc: " + str(awc_actual_ratio)
             print "   ctc: " + str(ctc_actual_ratio)
             print "   cvc: " + str(cvc_actual_ratio)
+            print "   ctc_cvc: " + str(ctc_cvc_ratio)
 
             regions.append((meaningful_ratio,
                             awc_actual_ratio,
@@ -222,6 +223,7 @@ class Overlaps:
         # build the map
         for index, region_average in enumerate(list):
             region_map[index] = region_average
+        print "size of region map: " + str(len(region_map))
         print "region map: " + str(region_map)
         print "top_n : " + str(top_n)
         #while len(ranked_list) < top_n:
