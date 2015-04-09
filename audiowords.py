@@ -11,7 +11,7 @@ class MainWindow:
 
         self.root = master                  # main GUI context
         self.root.title("AudioWords")       # title of window
-        self.root.geometry("1250x400")       # size of GUI window
+        self.root.geometry("1300x400")       # size of GUI window
         self.main_frame = Frame(root)       # main frame into which all the Gui components will be placed
         self.main_frame.pack()              # pack() basically sets up/inserts the element (turns it on)
 
@@ -245,7 +245,7 @@ class MainWindow:
         self.silence_list_box.delete(0, END)
 
     def load_lena(self):
-
+        self.clear_lena()
         self.lena_file = tkFileDialog.askopenfilename()
 
         #if self.top_n_region_entry.get():
@@ -262,36 +262,36 @@ class MainWindow:
 
             for index, x in enumerate(self.overlaps.ranked_meaningful):
                 self.meaningful_region_box.insert(index,
-                                                  str(x) + " - " + \
-                                                  self.offset_to_hour(self.offset_lookup(x, self.overlaps.meaningful_map)) + " - " + \
-                                                  str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.meaningful_map))) + "ms ")
+                                                  str(x) + " - " + str(self.overlaps.meaningful_map[x])+ " - " +\
+                                                  self.offset_to_hour(x) + " - " + \
+                                                  str(self.offset_to_millisecond(x)) + "ms ")
 
             for index, x in enumerate(self.overlaps.ranked_awc_actual):
                 self.awc_region_box.insert(index,
-                                           str(x) + " - " + \
-                                           self.offset_to_hour(self.offset_lookup(x, self.overlaps.awc_actual_map)) + " - " + \
-                                           str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.awc_actual_map))) + "ms ")
+                                           str(x) + " - " + str(self.overlaps.awc_actual_map[x])+ " - " +\
+                                           self.offset_to_hour(x) + " - " + \
+                                           str(self.offset_to_millisecond(x)) + "ms ")
 
             for index, x in enumerate(self.overlaps.ranked_ctc_actual):
                 self.ctc_region_box.insert(index,
-                                           str(x) + " - " + \
-                                           self.offset_to_hour(self.offset_lookup(x, self.overlaps.ctc_actual_map)) + " - " + \
-                                           str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.ctc_actual_map))) + "ms ")
+                                           str(x) + " - " + str(self.overlaps.ctc_actual_map[x])+ " - " +\
+                                           self.offset_to_hour(x) + " - " + \
+                                           str(self.offset_to_millisecond(x)) + "ms ")
 
             for index, x in enumerate(self.overlaps.ranked_cvc_actual):
                 self.cvc_region_box.insert(index,
-                                           str(x) + " - " + \
-                                           self.offset_to_hour(self.offset_lookup(x, self.overlaps.cvc_actual_map)) + " - " + \
-                                           str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.cvc_actual_map))) + "ms ")
+                                           str(x) + " - " + str(self.overlaps.awc_actual_map[x])+ " - " +\
+                                           self.offset_to_hour(x) + " - " + \
+                                           str(self.offset_to_millisecond(x)) + "ms ")
 
             for index, x in enumerate(self.overlaps.ranked_ctc_cvc):
                 self.ctc_cvc_box.insert(index,
-                                        str(x) + " - " +\
-                                        self.offset_to_hour(self.offset_lookup(x, self.overlaps.ctc_cvc_map)) + " - " +\
-                                        str(self.offset_to_millisecond(self.offset_lookup(x, self.overlaps.ctc_cvc_map))) + "ms ")
+                                        str(x) + " - " +str(self.overlaps.ctc_cvc_map[x])+ " - " +\
+                                        self.offset_to_hour(x) + " - " +\
+                                        str(self.offset_to_millisecond(x)) + "ms ")
 
     def clear_lena(self):
-        self.top_n_region_entry.delete(0, END)
+        #self.top_n_region_entry.delete(0, END)
         self.lena_file = None
         self.overlaps = None
         self.overlaps_export_file = None
@@ -300,6 +300,7 @@ class MainWindow:
         self.awc_region_box.delete(0, END)
         self.ctc_region_box.delete(0, END)
         self.cvc_region_box.delete(0, END)
+        self.ctc_cvc_box.delete(0, END)
 
 
     def export_overlaps(self):
@@ -326,10 +327,15 @@ class MainWindow:
 
     def offset_lookup(self, average, map):
 
+        offsets = []
+
         for key, value in map.iteritems():
             if value == average:
-                return key
-
+                offsets.append(key)
+        print "offsets for " + str(average) + "  " + str(offsets)
+        milliseconds = [self.offset_to_millisecond(offsets[i]) for i, item in enumerate(offsets)]
+        print "milliseconds: " + str(milliseconds)
+        return offsets
 
         #with open(dummy, "w") as file:
             # size = len(self.overlaps.ranked_ctc_actual)

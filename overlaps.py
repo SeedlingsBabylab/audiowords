@@ -185,15 +185,20 @@ class Overlaps:
             hour_buffer = self.dataset.data[x:y]  # re-slice
 
         self.meaningful_regions = [average[0] for average in regions]
-        print self.meaningful_regions
+        print "meaningful regions: " + str(self.meaningful_regions)
+        print
         self.awc_actual_regions = [average[1] for average in regions]
-        print self.awc_actual_regions
+        print "awc regions: " + str(self.awc_actual_regions)
+        print
         self.ctc_actual_regions = [average[2] for average in regions]
-        print self.ctc_actual_regions
+        print "ctc regions: " + str(self.ctc_actual_regions)
+        print
         self.cvc_actual_regions = [average[3] for average in regions]
-        print self.cvc_actual_regions
+        print "cvc regions: " + str(self.cvc_actual_regions)
+        print
         self.ctc_cvc_regions = [average[4] for average in regions]
-        print self.ctc_cvc_regions
+        print "ctc/cvc regions: " + str(self.ctc_cvc_regions)
+        print
 
         self.meaningful_map, self.ranked_meaningful = self.rank_list(self.meaningful_regions, self.top_n)
         self.awc_actual_map, self.ranked_awc_actual = self.rank_list(self.awc_actual_regions, self.top_n)
@@ -202,9 +207,13 @@ class Overlaps:
         self.ctc_cvc_map, self.ranked_ctc_cvc = self.rank_list(self.ctc_cvc_regions, self.top_n)
 
         print "ranked_meaningful: " + str(self.ranked_meaningful)
+        print
         print "ranked awc: " + str(self.ranked_awc_actual)
+        print
         print "ranked ctc: " + str(self.ranked_ctc_actual)
+        print
         print "ranked cvc: " + str(self.ranked_cvc_actual)
+        print
         print "ranked ctc_cvc: " + str(self.ranked_ctc_cvc)
 
         print
@@ -236,38 +245,57 @@ class Overlaps:
 
 
     def filter_overlaps(self, list, map, top_n):
-        offset_list = [] # this is a list of interval offsets
+
+        # this is a list of lists, containing interval offsets
+        # each inner list corresponds to all offsets containing
+        # a certain magnitude
+        offset_lists = []
+
+
 
         last_interval = None
 
+
         for index, x in enumerate(list):
-            for key, value in map.items():
+            # this is the temporary list that will be pushed into the
+            # offset lists once its filled
+            temp_offsets = []
+            for key, value in map.iteritems():
                 if value == x:
+                    temp_offsets.append(key)
                     last_interval = key
-                    offset_list.append(last_interval)
-        print "offset list: " + str(offset_list)
-        result = []
-        result.append(offset_list[0]) # add the densest hour
-        last_result = result[len(result)-1]
+            offset_lists.append(temp_offsets)
 
-        for index, x in enumerate(offset_list):
-            if len(result) >= top_n:
-                break
-            if self.overlaping(result, x):
-                continue
-            else:
-                result.append(x)
-                last_result = result[len(result)-1]
+        print "offset list: " + str(offset_lists)
+        results = []
+        #results.append(offset_lists)  # add the densest hours
+        #last_result = results[len(results)-1]
 
+
+        for index, offset_group in enumerate(offset_lists):
+            for index, offset in enumerate(offset_group):
+                if len(results) >= top_n:
+                    break
+                if self.overlapping(results, offset):
+                    continue
+                else:
+                    results.append(offset)
+                    #last_result = results[len(results)-1]
+
+        print "results: " + str(results)
 
         # convert back to averages
+        #for index, x in enumerate(results):
+         #   results[index] = map[x]
 
-        for index, x in enumerate(result):
-            result[index] = map[x]
+        return results
 
-        return result
 
-    def overlaping(self, previous_regions, this_start):
+
+
+
+
+    def overlapping(self, previous_regions, this_start):
 
         for x in previous_regions:
             if (x > (this_start-12)) and (x < (this_start+12)):

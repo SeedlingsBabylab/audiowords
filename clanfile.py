@@ -162,14 +162,14 @@ class ClanFileParser:
         output = open(self.export_clan_file, "w")
 
 
-        offset_list = [] # this is a list of interval offsets
+        offset_list = region_values # this is a list of interval offsets
 
 
 
-        for index, x in enumerate(region_values):
-            for key, value in region_map.items():
-                if value == x:
-                    offset_list.append(key)
+        # for index, x in enumerate(region_values):
+        #     for key, value in region_map.items():
+        #         if value == x:
+        #             offset_list.append(key)
         sorted_offsets = sorted(offset_list)
 
         # we initialize a queue of regions using the
@@ -211,8 +211,8 @@ class ClanFileParser:
 
             # pop the first silence and region off the queue
             curr_region = region_queue.popleft()
-            curr_region_start = curr_region * 5 * 60 * 60 # convert to milliseconds
-            curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
+            curr_region_start = curr_region * 5 * 60 * 1000 # convert to milliseconds
+            curr_region_end   = curr_region_start + 60 * 60 * 1000 # end is 1 hour from start
             curr_silence = silence_queue.popleft()
 
             print "curr_region: " + str(curr_region)
@@ -283,7 +283,7 @@ class ClanFileParser:
                                                       str(int(curr_region_start))) + "\n")
 
                             # insert the comment immediately after the altered clan entry
-                            output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}]\n"\
+                            output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}] ]\n"\
                                          .format(region_number,
                                                  len(region_values),
                                                  curr_region_start,
@@ -331,7 +331,7 @@ class ClanFileParser:
                                                       str(int(curr_region_end))) + "\n")
 
                             # then we write the end subregion comment right afterwards
-                            output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}]\n"
+                            output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}] ]\n"
                                          .format(region_number,
                                                  len(region_values),
                                                  curr_region_end,
@@ -348,8 +348,11 @@ class ClanFileParser:
                             # and pop the next silence off of it
                             if region_queue:
                                 curr_region = region_queue.popleft()
-                                curr_region_start = curr_region * 5 * 60 * 60 # convert to milliseconds
-                                curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
+                                print "curr_region: " + str(curr_region)
+                                curr_region_start = curr_region * 5 * 60 * 1000 # convert to milliseconds
+                                curr_region_end   = curr_region_start + 60 * 60 * 1000 # end is 1 hour from start
+                                print "curr_region_start: " + str(curr_region_start)
+                                print "curr_region_end: " + str(curr_region_end)
                                 region_number = region_number + 1
                             else:
                                 # if region_queue is empty, we set curr_region to None
@@ -383,8 +386,8 @@ class ClanFileParser:
                             # and pop the next subregion off of it
                             if region_queue:
                                 curr_region = region_queue.popleft()
-                                curr_region_start = curr_region * 5 * 60 * 60 # convert to milliseconds
-                                curr_region_end   = curr_region_start + 60 * 60 * 60 # end is 1 hour from start
+                                curr_region_start = curr_region * 5 * 60 * 1000 # convert to milliseconds
+                                curr_region_end   = curr_region_start + 60 * 60 * 1000 # end is 1 hour from start
                                 region_number = region_number + 1
                             else:
                                 # if silence_queue is empty, we set curr_silence to None
@@ -395,7 +398,6 @@ class ClanFileParser:
                                 # further processing
                                 curr_region = None
                             continue
-
 
                 if current_clan_interval[1] >= curr_silence.end:
                     curr_silence = silence_queue.popleft()
