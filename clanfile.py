@@ -161,7 +161,7 @@ class ClanFileParser:
         # open the export clan file
         output = open(self.export_clan_file, "w")
 
-
+        lowest_region = region_values[len(region_values) - 1]
         offset_list = region_values # this is a list of interval offsets
 
 
@@ -179,19 +179,7 @@ class ClanFileParser:
         region_queue = deque(sorted_offsets)
         silence_queue = deque(silences)
 
-        print
-        print
-        print
-        print
-        print
-        print
-        print
-        print
-        print
-        print
-        print
-        print
-        print
+
 
         print "region values: " + str(region_values)
         print "sorted_offsets: " + str(sorted_offsets)
@@ -288,15 +276,23 @@ class ClanFileParser:
                             output.write(line.replace(interval_string,
                                                       str(current_clan_interval[0]) + "_" + \
                                                       str(int(curr_region_start))) + "\n")
-
-                            # insert the comment immediately after the altered clan entry
-                            output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}] ]\n"
-                                            .format(region_number,
-                                                    len(region_values),
-                                                    curr_region_start,
-                                                    current_clan_interval[1],
-                                                    curr_silence.start,
-                                                    curr_silence.end))
+                            if (curr_region == lowest_region):
+                                output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {} - lowest ranked region; [inside silent region: [{}, {}] ]\n"
+                                                .format(region_number,
+                                                        len(region_values),
+                                                        curr_region_start,
+                                                        current_clan_interval[1],
+                                                        curr_silence.start,
+                                                        curr_silence.end))
+                            else:
+                                # insert the comment immediately after the altered clan entry
+                                output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}] ]\n"
+                                                .format(region_number,
+                                                        len(region_values),
+                                                        curr_region_start,
+                                                        current_clan_interval[1],
+                                                        curr_silence.start,
+                                                        curr_silence.end))
 
                             start_written = True
                             end_written = False
@@ -312,7 +308,7 @@ class ClanFileParser:
                                                       str(current_clan_interval[0]) + "_" +\
                                                       str(int(curr_region_start))) + "\n")
 
-                            if (region_number == len(sorted_offsets)) and not silence_overlapped:
+                            if (curr_region == lowest_region):
                                 output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
                                                 .format(region_number,
                                                         len(region_values),
@@ -345,14 +341,24 @@ class ClanFileParser:
                                                       str(current_clan_interval[0]) + "_" + \
                                                       str(int(curr_region_end))) + "\n")
 
-                            # then we write the end subregion comment right afterwards
-                            output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}] ]\n"
-                                            .format(region_number,
-                                                    len(region_values),
-                                                    curr_region_end,
-                                                    current_clan_interval[1],
-                                                    curr_silence.start,
-                                                    curr_silence.end))
+                            if (curr_region == lowest_region):
+                                output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} - lowest ranked region; [inside silent region: [{}, {}] ]\n"
+                                                .format(region_number,
+                                                        len(region_values),
+                                                        curr_region_end,
+                                                        current_clan_interval[1],
+                                                        curr_silence.start,
+                                                        curr_silence.end))
+
+                            else:
+                                # then we write the end subregion comment right afterwards
+                                output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} [inside silent region: [{}, {}] ]\n"
+                                                .format(region_number,
+                                                        len(region_values),
+                                                        curr_region_end,
+                                                        current_clan_interval[1],
+                                                        curr_silence.start,
+                                                        curr_silence.end))
 
                             end_written = True
                             start_written = False
@@ -387,7 +393,7 @@ class ClanFileParser:
                                                       str(current_clan_interval[0]) + "_" +\
                                                       str(int(curr_region_end))) + "\n")
 
-                            if (region_number == len(sorted_offsets)) and not silence_overlapped:
+                            if (curr_region == lowest_region):
                                 output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
                                                 .format(region_number,
                                                         len(region_values),
