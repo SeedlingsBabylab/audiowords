@@ -219,8 +219,7 @@ class MainWindow:
         # get path for new/modified clan file
         self.export_clan_file = tkFileDialog.asksaveasfilename()
 
-        # the construction of the ClanFileParser object runs
-        # all the necessary processes on it. We surround this
+        # We surround the ClanFileParser operations
         # in a try: except: block because in some unlikely
         # circumstances the clan file can be formatted incorrectly,
         # requiring that we stop all operations and report the error.
@@ -248,7 +247,6 @@ class MainWindow:
         self.clear_lena()
         self.lena_file = tkFileDialog.askopenfilename()
 
-        #if self.top_n_region_entry.get():
 
         if not self.top_n_region_entry.get():
             print "we're inside the top_n missing check"
@@ -291,7 +289,6 @@ class MainWindow:
                                         str(self.offset_to_millisecond(x)) + "ms ")
 
     def clear_lena(self):
-        #self.top_n_region_entry.delete(0, END)
         self.lena_file = None
         self.overlaps = None
         self.overlaps_export_file = None
@@ -304,7 +301,15 @@ class MainWindow:
 
 
     def export_overlaps(self):
-
+        """
+        This gets called after the silences have been processed and
+        inserted into the clan file. The loaded clan file should be
+        this new one with the silences inserted. This function constructs
+        a ClanFileParser object, and immediately calls its insert_overlaps()
+        method (passing the ranked ctc_cvc offsets, their map, and the
+         silence regions from the previous silence inserting step.
+        :return:
+        """
         overlaps_export_file = tkFileDialog.asksaveasfilename()
 
         ClanFileParser(self.clan_file, overlaps_export_file).\
@@ -326,7 +331,14 @@ class MainWindow:
         return 5 * offset * 60 * 1000
 
     def offset_lookup(self, average, map):
+        """
+        Returns a list of all offsets which have a particular
+        average.
 
+        :param average: some value for offset average
+        :param map: offset-average mapping
+        :return: all the offsets which have "average" as their average
+        """
         offsets = []
 
         for key, value in map.iteritems():
@@ -336,38 +348,6 @@ class MainWindow:
         milliseconds = [self.offset_to_millisecond(offsets[i]) for i, item in enumerate(offsets)]
         print "milliseconds: " + str(milliseconds)
         return offsets
-
-        #with open(dummy, "w") as file:
-            # size = len(self.overlaps.ranked_ctc_actual)
-            # interval = None
-            # file.write("\"density\",\"interval\",\"source\"\n")
-            # for index, x in enumerate(self.overlaps.ranked_ctc_actual):
-            #     for key, value in self.overlaps.ctc_actual_map.items():
-            #         if value == x:
-            #             interval = key
-            #             print interval
-            #     file.write(str(self.overlaps.ranked_ctc_actual[index]) +","+str(interval)+","+"CTC\n")
-            #
-            # for index, x in enumerate(self.overlaps.ranked_awc_actual):
-            #     for key, value in self.overlaps.awc_actual_map.items():
-            #         if value == x:
-            #             interval = key
-            #             print interval
-            #     file.write(str(self.overlaps.ranked_awc_actual[index]) +","+str(interval)+","+"AWC\n")
-            #
-            # for index, x in enumerate(self.overlaps.ranked_cvc_actual):
-            #     for key, value in self.overlaps.cvc_actual_map.items():
-            #         if value == x:
-            #             interval = key
-            #             print interval
-            #     file.write(str(self.overlaps.ranked_cvc_actual[index]) +","+str(interval)+","+"CVC\n")
-            #
-            # for index, x in enumerate(self.overlaps.ranked_meaningful):
-            #     for key, value in self.overlaps.meaningful_map.items():
-            #         if value == x:
-            #             interval = key
-            #             print interval
-            #     file.write(str(self.overlaps.ranked_meaningful[index]) +","+str(interval)+","+"Meaningful\n")
 
 if __name__ == "__main__":
 

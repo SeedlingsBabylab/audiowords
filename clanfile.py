@@ -155,7 +155,13 @@ class ClanFileParser:
 
 
     def insert_overlaps(self, region_values, region_map, silences):
+        """
 
+        :param region_values:
+        :param region_map: map of offsets to averages
+        :param silences: list of silent regions parsed earlier
+        :return:
+        """
         region_number = 1
 
         # open the export clan file

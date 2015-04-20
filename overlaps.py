@@ -29,7 +29,16 @@ class Overlaps:
         self.load_data(lena_file)
 
     def load_data(self, file):
+        """
+        Parses out all the values from the lena file and fills
+        the member variables for class Overlaps with all the
+        ctc/cvc/awc/etc....values. At the end of the function
+        we call find_dense_regions(), which will use all the data
+        that was just pulled from the file
 
+        :param file: lena file.
+        :return:
+        """
         visit_date = None
         with open(file, "rU") as file:
             reader = csv.reader(file)
@@ -114,7 +123,16 @@ class Overlaps:
             self.find_dense_regions()
 
     def find_dense_regions(self):
+        """
+        Here we go through the process of adding up all the
+        hour long chunks at offsets of 5 minutes from each other.
+        After all the hour chunks have been tallied up and placed
+        in their respective member variables, rank_list() is called
+        on all of them. rank_list() returns the ranked offsets as well
+        as their associated hashmaps.
 
+        :return:
+        """
         # we define region in terms of offsets from the beginning
         # so.... regions[n]:
         #
@@ -184,6 +202,14 @@ class Overlaps:
             y += 1  # bump
             hour_buffer = self.dataset.data[x:y]  # re-slice
 
+
+        # pull out the N'th index of each element in "regions",
+        # which is a list of tuples, with list comprehensions.
+        # Each tuple has the average value for the hour chunk
+        # at that offset for each ranking metric:
+        #
+        #   (meaningful, awc, ctc, ctc_cvc)
+        #
         self.meaningful_regions = [average[0] for average in regions]
         print "meaningful regions: " + str(self.meaningful_regions)
         print
@@ -223,7 +249,19 @@ class Overlaps:
 
 
     def rank_list(self, list, top_n):
+        """
+        This builds the regions map, resets decimal precision so
+        that equality can be checked, and passes the sorted_list,
+        region_map, and top_n to the filter_overlaps() method, which
+        should run through and check that there are no regions that
+        overlap with each other. filter_overlaps will return a
+        filtered_list. This filtered list will be returned with the
+        region_map (so that we can lookup those regions later.
 
+        :param list: The offset list
+        :param top_n: how many subregions to find
+        :return: region map and filtered list
+        """
         region_map = {}
         ranked_list = []
 
@@ -245,7 +283,15 @@ class Overlaps:
 
 
     def filter_overlaps(self, list, map, top_n):
+        """
+        This passes through the ranked offset list and uses the region
+        map to check that the top_n regions do not overlap with each other.
 
+        :param list: offset list
+        :param map: region map
+        :param top_n: # of subregions
+        :return: a list of offsets (with no overlaps)
+        """
         # this is a list of lists, containing interval offsets
         # each inner list corresponds to all offsets containing
         # a certain magnitude
@@ -268,9 +314,6 @@ class Overlaps:
 
         print "offset list: " + str(offset_lists)
         results = []
-        #results.append(offset_lists)  # add the densest hours
-        #last_result = results[len(results)-1]
-
 
         for index, offset_group in enumerate(offset_lists):
             for index, offset in enumerate(offset_group):
@@ -284,26 +327,27 @@ class Overlaps:
 
         print "results: " + str(results)
 
-        # convert back to averages
-        #for index, x in enumerate(results):
-         #   results[index] = map[x]
-
         return results
 
 
-
-
-
-
     def overlapping(self, previous_regions, this_start):
-
+        """
+        :param previous_regions: all the offsets which have already been added to "results"
+        :param this_start: the millisecond starting point of the offset being tested
+        :return: True if overlapping, False if not
+        """
         for x in previous_regions:
             if (x > (this_start-12)) and (x < (this_start+12)):
                 return True
         return False
 
     def set_precision(self, list, digits):
+        """
 
+        :param list: list of averages
+        :param digits: number of places after decimal point
+        :return: list with precision reset
+        """
         factor = 10**digits
         for index, x in enumerate(list):
             temp = int(x * factor)
