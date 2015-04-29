@@ -11,7 +11,7 @@ class MainWindow:
 
         self.root = master                  # main GUI context
         self.root.title("AudioWords")       # title of window
-        self.root.geometry("1300x400")       # size of GUI window
+        self.root.geometry("1100x500")       # size of GUI window
         self.main_frame = Frame(root)       # main frame into which all the Gui components will be placed
         self.main_frame.pack()              # pack() basically sets up/inserts the element (turns it on)
 
@@ -115,10 +115,10 @@ class MainWindow:
         self.ctc_region_box.grid(row=1, column=4)
 
         self.cvc_region_box = Listbox(self.main_frame, width=32, height=12)
-        self.cvc_region_box.grid(row=1, column=5)
+        self.cvc_region_box.grid(row=3, column=3, rowspan=5)
 
         self.ctc_cvc_box = Listbox(self.main_frame, width=32, height=12)
-        self.ctc_cvc_box.grid(row=1, column=6)
+        self.ctc_cvc_box.grid(row=3, column=4, rowspan=5)
 
         # declare and grid all the labels for the density boxes
 
@@ -132,10 +132,10 @@ class MainWindow:
         self.ctc_label.grid(row=0, column=4)
 
         self.cvc_label = Label(self.main_frame, text="CVC")
-        self.cvc_label.grid(row=0, column=5)
+        self.cvc_label.grid(row=2, column=3)
 
         self.ctc_cvc_label = Label(self.main_frame, text="CTC/CVC")
-        self.ctc_cvc_label.grid(row=0, column=6)
+        self.ctc_cvc_label.grid(row=2, column=4)
 
     def load_regions(self):
 
