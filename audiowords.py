@@ -11,7 +11,7 @@ class MainWindow:
 
         self.root = master                  # main GUI context
         self.root.title("AudioWords")       # title of window
-        self.root.geometry("1100x500")       # size of GUI window
+        self.root.geometry("1150x500")       # size of GUI window
         self.main_frame = Frame(root)       # main frame into which all the Gui components will be placed
         self.main_frame.pack()              # pack() basically sets up/inserts the element (turns it on)
 
@@ -105,19 +105,19 @@ class MainWindow:
         self.silence_list_box.grid(row=1, column=0)
 
         # declare and load the box for the word density overlap functions
-        self.meaningful_region_box = Listbox(self.main_frame, width=32, height=12)
+        self.meaningful_region_box = Listbox(self.main_frame, width=40, height=12)
         self.meaningful_region_box.grid(row= 1, column=2)
 
-        self.awc_region_box = Listbox(self.main_frame, width=32, height=12)
+        self.awc_region_box = Listbox(self.main_frame, width=40, height=12)
         self.awc_region_box.grid(row=1, column=3)
 
-        self.ctc_region_box = Listbox(self.main_frame, width=32, height=12)
+        self.ctc_region_box = Listbox(self.main_frame, width=40, height=12)
         self.ctc_region_box.grid(row=1, column=4)
 
-        self.cvc_region_box = Listbox(self.main_frame, width=32, height=12)
+        self.cvc_region_box = Listbox(self.main_frame, width=40, height=12)
         self.cvc_region_box.grid(row=3, column=3, rowspan=5)
 
-        self.ctc_cvc_box = Listbox(self.main_frame, width=32, height=12)
+        self.ctc_cvc_box = Listbox(self.main_frame, width=40, height=12)
         self.ctc_cvc_box.grid(row=3, column=4, rowspan=5)
 
         # declare and grid all the labels for the density boxes
@@ -260,33 +260,33 @@ class MainWindow:
 
             for index, x in enumerate(self.overlaps.ranked_meaningful):
                 self.meaningful_region_box.insert(index,
-                                                  str(x) + " - " + str(self.overlaps.meaningful_map[x])+ " - " +\
-                                                  self.offset_to_hour(x) + " - " + \
-                                                  str(self.offset_to_millisecond(x)) + "ms ")
+                                                  str(x) + "   -   " + str(self.overlaps.meaningful_map[x])+ "   -   " +\
+                                                  self.offset_to_hour(x) + "   -   " + \
+                                                  str(self.offset_to_millisecond(x)) + " ms ")
 
             for index, x in enumerate(self.overlaps.ranked_awc_actual):
                 self.awc_region_box.insert(index,
-                                           str(x) + " - " + str(self.overlaps.awc_actual_map[x])+ " - " +\
-                                           self.offset_to_hour(x) + " - " + \
-                                           str(self.offset_to_millisecond(x)) + "ms ")
+                                           str(x) + "   -  " + str(self.overlaps.awc_actual_map[x])+ "   -   " +\
+                                           self.offset_to_hour(x) + "   -   " + \
+                                           str(self.offset_to_millisecond(x)) + " ms ")
 
             for index, x in enumerate(self.overlaps.ranked_ctc_actual):
                 self.ctc_region_box.insert(index,
-                                           str(x) + " - " + str(self.overlaps.ctc_actual_map[x])+ " - " +\
-                                           self.offset_to_hour(x) + " - " + \
-                                           str(self.offset_to_millisecond(x)) + "ms ")
+                                           str(x) + "   -   " + str(self.overlaps.ctc_actual_map[x])+ "   -   " +\
+                                           self.offset_to_hour(x) + "   -   " + \
+                                           str(self.offset_to_millisecond(x)) + " ms ")
 
             for index, x in enumerate(self.overlaps.ranked_cvc_actual):
                 self.cvc_region_box.insert(index,
-                                           str(x) + " - " + str(self.overlaps.awc_actual_map[x])+ " - " +\
-                                           self.offset_to_hour(x) + " - " + \
-                                           str(self.offset_to_millisecond(x)) + "ms ")
+                                           str(x) + "   -  " + str(self.overlaps.awc_actual_map[x])+ "   -   " +\
+                                           self.offset_to_hour(x) + "   -   " + \
+                                           str(self.offset_to_millisecond(x)) + " ms ")
 
             for index, x in enumerate(self.overlaps.ranked_ctc_cvc):
                 self.ctc_cvc_box.insert(index,
-                                        str(x) + " - " +str(self.overlaps.ctc_cvc_map[x])+ " - " +\
-                                        self.offset_to_hour(x) + " - " +\
-                                        str(self.offset_to_millisecond(x)) + "ms ")
+                                        str(x) + "   -  " +str(self.overlaps.ctc_cvc_map[x])+ "   -   " +\
+                                        self.offset_to_hour(x) + "   -   " +\
+                                        str(self.offset_to_millisecond(x)) + " ms ")
 
     def clear_lena(self):
         self.lena_file = None
