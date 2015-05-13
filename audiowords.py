@@ -11,7 +11,7 @@ class MainWindow:
 
         self.root = master                  # main GUI context
         self.root.title("AudioWords")       # title of window
-        self.root.geometry("1150x500")       # size of GUI window
+        self.root.geometry("1210x500")       # size of GUI window
         self.main_frame = Frame(root)       # main frame into which all the Gui components will be placed
         self.main_frame.pack()              # pack() basically sets up/inserts the element (turns it on)
 
@@ -101,24 +101,24 @@ class MainWindow:
 
 
         # declare and load the box where parsed silences will be previewed
-        self.silence_list_box = Listbox(self.main_frame, width=26, height = 12)
-        self.silence_list_box.grid(row=1, column=0)
+        self.silence_list_box = Listbox(self.main_frame, width=26, height=12)
+        self.silence_list_box.grid(row=1, column=0, padx=7)
 
         # declare and load the box for the word density overlap functions
         self.meaningful_region_box = Listbox(self.main_frame, width=40, height=12)
-        self.meaningful_region_box.grid(row= 1, column=2)
+        self.meaningful_region_box.grid(row= 1, column=2, padx=7)
 
         self.awc_region_box = Listbox(self.main_frame, width=40, height=12)
-        self.awc_region_box.grid(row=1, column=3)
+        self.awc_region_box.grid(row=1, column=3, padx=7)
 
         self.ctc_region_box = Listbox(self.main_frame, width=40, height=12)
-        self.ctc_region_box.grid(row=1, column=4)
+        self.ctc_region_box.grid(row=1, column=4, padx=7)
 
         self.cvc_region_box = Listbox(self.main_frame, width=40, height=12)
-        self.cvc_region_box.grid(row=3, column=3, rowspan=5)
+        self.cvc_region_box.grid(row=3, column=3, rowspan=5, padx=7)
 
         self.ctc_cvc_box = Listbox(self.main_frame, width=40, height=12)
-        self.ctc_cvc_box.grid(row=3, column=4, rowspan=5)
+        self.ctc_cvc_box.grid(row=3, column=4, rowspan=5, padx=7)
 
         # declare and grid all the labels for the density boxes
 
