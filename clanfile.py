@@ -43,7 +43,7 @@ class ClanFileParser:
             end_written = False
 
             # We iterate over the clan file line by line
-            for raw_line in file:
+            for index, raw_line in enumerate(file):
                 # get rid of preceding and trailing whitespace from the line
                 line = raw_line.strip()
 
@@ -105,6 +105,7 @@ class ClanFileParser:
 
                         # We first alter the clan time interval to match the end of the
                         # silence we are about to insert, and write it to the output file
+
                         output.write(line.replace(interval_string,
                                                   str(current_clan_interval[0]) + "_" +\
                                                   str(int(curr_silence.end))) + "\n")
@@ -187,9 +188,9 @@ class ClanFileParser:
 
 
 
-        print "region values: " + str(region_values)
-        print "sorted_offsets: " + str(sorted_offsets)
-        print "region queue: " + str(region_queue)
+        # print "region values: " + str(region_values)
+        # print "sorted_offsets: " + str(sorted_offsets)
+        # print "region queue: " + str(region_queue)
 
 
         with open(self.clan_file, "rU") as file:
@@ -209,9 +210,9 @@ class ClanFileParser:
             curr_region_end   = curr_region_start + 60 * 60 * 1000 # end is 1 hour from start
             curr_silence = silence_queue.popleft()
 
-            print "curr_region: " + str(curr_region)
-            print "curr_region_start: " + str(curr_region_start)
-            print "curr_region_end: " + str(curr_region_end)
+            # print "curr_region: " + str(curr_region)
+            # print "curr_region_start: " + str(curr_region_start)
+            # print "curr_region_end: " + str(curr_region_end)
 
             # initialize the start/end written flags
             start_written = False
@@ -226,7 +227,7 @@ class ClanFileParser:
             silence_overlapped = False
 
             # We iterate over the clan file line by line
-            for raw_line in file:
+            for index, raw_line in enumerate(file):
                 # get rid of preceding and trailing whitespace from the line
                 line = raw_line.strip()
 
@@ -257,8 +258,13 @@ class ClanFileParser:
                     # XYZ is strictly > ABC. If not we print warning to
                     # GUI and raise exception, halting the clan file processing
                     if current_clan_interval[1] < current_clan_interval[0]:
-                        raise Exception("timestamp interval is malformed: {}_{}".format(interval[0],
-                                                                                        interval[1]))
+                        print "\n\n***************************************************************************"
+                        print "timestamp interval is malformed: {}_{}:   CLAN file line# {}"\
+                            .format(interval[0],
+                                    interval[1],
+                                    index)
+                        print "***************************************************************************\n"
+
                     if (curr_region_start > curr_silence.start) and\
                             (curr_region_start < curr_silence.end):
                         region_start_in_silence = True
@@ -283,7 +289,7 @@ class ClanFileParser:
                     if (curr_region_start <= current_clan_interval[1])\
                             and (not start_written):
                         if region_start_in_silence or region_end_in_silence or region_contains_silence:
-                            print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
+                            #print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
                             # alter the ending timestamp to correspond to the beginning
                             # of the subregion, and write the new line to the output file
                             output.write(line.replace(interval_string,
@@ -315,7 +321,7 @@ class ClanFileParser:
                             # head to next line in the file
                             continue
                         else:
-                            print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
+                            #print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
                             # alter the ending timestamp to correspond to the beginning
                             # of the silence, and write the new line to the output file
                             output.write(line.replace(interval_string,
@@ -348,16 +354,16 @@ class ClanFileParser:
                     if (curr_region_end <= current_clan_interval[1])\
                             and start_written\
                             and (not end_written):
-                        print "inside the end writing section"
+                        #print "inside the end writing section"
                         if region_start_in_silence or region_end_in_silence or region_contains_silence:
-                            print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
+                            #print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
                             # We first alter the clan time interval to match the end of the
                             # subregion we are about to insert, and write it to the output file
                             output.write(line.replace(interval_string,
                                                       str(current_clan_interval[0]) + "_" + \
                                                       str(int(curr_region_end))) + "\n")
 
-                            if (curr_region == lowest_region):
+                            if curr_region == lowest_region:
                                 output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
                                                         len(region_values),
@@ -387,11 +393,11 @@ class ClanFileParser:
                             # and pop the next silence off of it
                             if region_queue:
                                 curr_region = region_queue.popleft()
-                                print "curr_region: " + str(curr_region)
+                                #print "curr_region: " + str(curr_region)
                                 curr_region_start = curr_region * 5 * 60 * 1000 # convert to milliseconds
                                 curr_region_end   = curr_region_start + 60 * 60 * 1000 # end is 1 hour from start
-                                print "curr_region_start: " + str(curr_region_start)
-                                print "curr_region_end: " + str(curr_region_end)
+                                #print "curr_region_start: " + str(curr_region_start)
+                                #print "curr_region_end: " + str(curr_region_end)
                                 region_number = region_number + 1
                             else:
                                 # if region_queue is empty, we set curr_region to None
@@ -403,7 +409,7 @@ class ClanFileParser:
                                 curr_region = None
                             continue
                         else:
-                            print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
+                            #print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
                             # We first alter the clan time interval to match the end of the
                             # silence we are about to insert, and write it to the output file
                             output.write(line.replace(interval_string,
@@ -447,6 +453,7 @@ class ClanFileParser:
                             continue
 
                 if current_clan_interval[1] >= curr_silence.end: # this is where the bug is
+                    #print "queue pre-pop: " + str(silence_queue)
                     curr_silence = silence_queue.popleft()
                 # this is a check for a special case. If we've reached @End,
                 # but the end of a silence has not been written, we insert that

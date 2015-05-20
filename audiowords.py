@@ -137,6 +137,10 @@ class MainWindow:
         self.ctc_cvc_label = Label(self.main_frame, text="CTC/CVC")
         self.ctc_cvc_label.grid(row=2, column=4)
 
+
+
+
+
     def load_regions(self):
 
         # check for empty minimum sound box
@@ -249,12 +253,12 @@ class MainWindow:
 
 
         if not self.top_n_region_entry.get():
-            print "we're inside the top_n missing check"
+
             self.top_n_missing_label.grid(row=7, column=2)
             #raise Exception("You're missing the top_n entry")
             return
         else:
-            print "we're still in load_lena()"
+
             self.top_n_missing_label.grid_remove()
             self.overlaps = Overlaps(self.lena_file, int(self.top_n_region_entry.get()))
 
@@ -344,9 +348,9 @@ class MainWindow:
         for key, value in map.iteritems():
             if value == average:
                 offsets.append(key)
-        print "offsets for " + str(average) + "  " + str(offsets)
+        #print "offsets for " + str(average) + "  " + str(offsets)
         milliseconds = [self.offset_to_millisecond(offsets[i]) for i, item in enumerate(offsets)]
-        print "milliseconds: " + str(milliseconds)
+        #print "milliseconds: " + str(milliseconds)
         return offsets
 
 if __name__ == "__main__":

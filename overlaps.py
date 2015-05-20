@@ -51,7 +51,7 @@ class Overlaps:
                 if visit_date is None:
                     visit_date = (date[0], date[1], date[2])
                 elif visit_date != (date[0], date[1], date[2]):
-                    print "Your file contains multiple different visits within the same file"
+                    print "The timestamps within your file span more than a single day"
 
                 # we represent date/time as a 5d tuple
                 # i.e. 02-13-2015 3:35 = (2, 13, 2015, 3, 35)
@@ -103,7 +103,7 @@ class Overlaps:
                     ctc_actual = int(line[21])
                     cvc_actual = int(line[24])
 
-                    print "meaningful: " + str(meaningful) + " awc: " + str(awc_actual) +  " cvc: " + str(ctc_actual) + "    cvc: " + str(cvc_actual)
+                    # print "meaningful: " + str(meaningful) + " awc: " + str(awc_actual) +  " cvc: " + str(ctc_actual) + "    cvc: " + str(cvc_actual)
 
                     self.dataset.data.append((meaningful, awc_actual, ctc_actual, cvc_actual))
 
@@ -111,14 +111,14 @@ class Overlaps:
                     #self.dataset.hours()
 
 
-                print
-                print "timestamp: " + line[10]
-
-            print
-            print
-            print self.dataset
-            #self.dataset.hours()
-            print "size of dataset:  " + str(len(self.dataset.data))
+            #     print
+            #     print "timestamp: " + line[10]
+            #
+            # print
+            # print
+            # print self.dataset
+            # #self.dataset.hours()
+            # print "size of dataset:  " + str(len(self.dataset.data))
 
             self.find_dense_regions()
 
@@ -172,15 +172,15 @@ class Overlaps:
             cvc_actual_ratio = float(cvc_actual_sum)/12
             ctc_cvc_ratio = float(ctc_cvc_sum)/12
 
-            print
-            print
-            print "--------------------------------------------------------------------------"
-            print "region: " + str(len(regions))
-            print "\n   meaningful: " + str(meaningful_ratio)
-            print "   awc: " + str(awc_actual_ratio)
-            print "   ctc: " + str(ctc_actual_ratio)
-            print "   cvc: " + str(cvc_actual_ratio)
-            print "   ctc_cvc: " + str(ctc_cvc_ratio)
+            # print
+            # print
+            # print "--------------------------------------------------------------------------"
+            # print "region: " + str(len(regions))
+            # print "\n   meaningful: " + str(meaningful_ratio)
+            # print "   awc: " + str(awc_actual_ratio)
+            # print "   ctc: " + str(ctc_actual_ratio)
+            # print "   cvc: " + str(cvc_actual_ratio)
+            # print "   ctc_cvc: " + str(ctc_cvc_ratio)
 
             regions.append((meaningful_ratio,
                             awc_actual_ratio,
@@ -211,20 +211,20 @@ class Overlaps:
         #   (meaningful, awc, ctc, ctc_cvc)
         #
         self.meaningful_regions = [average[0] for average in regions]
-        print "meaningful regions: " + str(self.meaningful_regions)
-        print
+        # print "meaningful regions: " + str(self.meaningful_regions)
+        # print
         self.awc_actual_regions = [average[1] for average in regions]
-        print "awc regions: " + str(self.awc_actual_regions)
-        print
+        # print "awc regions: " + str(self.awc_actual_regions)
+        # print
         self.ctc_actual_regions = [average[2] for average in regions]
-        print "ctc regions: " + str(self.ctc_actual_regions)
-        print
+        # print "ctc regions: " + str(self.ctc_actual_regions)
+        # print
         self.cvc_actual_regions = [average[3] for average in regions]
-        print "cvc regions: " + str(self.cvc_actual_regions)
-        print
+        # print "cvc regions: " + str(self.cvc_actual_regions)
+        # print
         self.ctc_cvc_regions = [average[4] for average in regions]
-        print "ctc/cvc regions: " + str(self.ctc_cvc_regions)
-        print
+        # print "ctc/cvc regions: " + str(self.ctc_cvc_regions)
+        # print
 
         self.meaningful_map, self.ranked_meaningful = self.rank_list(self.meaningful_regions, self.top_n)
         self.awc_actual_map, self.ranked_awc_actual = self.rank_list(self.awc_actual_regions, self.top_n)
@@ -232,19 +232,19 @@ class Overlaps:
         self.cvc_actual_map, self.ranked_cvc_actual = self.rank_list(self.cvc_actual_regions, self.top_n)
         self.ctc_cvc_map, self.ranked_ctc_cvc = self.rank_list(self.ctc_cvc_regions, self.top_n)
 
-        print "ranked_meaningful: " + str(self.ranked_meaningful)
-        print
-        print "ranked awc: " + str(self.ranked_awc_actual)
-        print
-        print "ranked ctc: " + str(self.ranked_ctc_actual)
-        print
-        print "ranked cvc: " + str(self.ranked_cvc_actual)
-        print
-        print "ranked ctc_cvc: " + str(self.ranked_ctc_cvc)
-
-        print
-        print
-        print
+        # print "ranked_meaningful: " + str(self.ranked_meaningful)
+        # print
+        # print "ranked awc: " + str(self.ranked_awc_actual)
+        # print
+        # print "ranked ctc: " + str(self.ranked_ctc_actual)
+        # print
+        # print "ranked cvc: " + str(self.ranked_cvc_actual)
+        # print
+        # print "ranked ctc_cvc: " + str(self.ranked_ctc_cvc)
+        #
+        # print
+        # print
+        # print
 
 
 
@@ -270,9 +270,9 @@ class Overlaps:
         # build the map
         for index, region_average in enumerate(list):
             region_map[index] = region_average
-        print "size of region map: " + str(len(region_map))
-        print "region map: " + str(region_map)
-        print "top_n : " + str(top_n)
+        # print "size of region map: " + str(len(region_map))
+        # print "region map: " + str(region_map)
+        # print "top_n : " + str(top_n)
         #while len(ranked_list) < top_n:
         max = 0
         sorted_list = sorted(list, reverse=True)
@@ -312,7 +312,7 @@ class Overlaps:
                     last_interval = key
             offset_lists.append(temp_offsets)
 
-        print "offset list: " + str(offset_lists)
+        # print "offset list: " + str(offset_lists)
         results = []
 
         for index, offset_group in enumerate(offset_lists):
@@ -325,7 +325,7 @@ class Overlaps:
                     results.append(offset)
                     #last_result = results[len(results)-1]
 
-        print "results: " + str(results)
+        # print "results: " + str(results)
 
         return results
 
@@ -353,7 +353,7 @@ class Overlaps:
             temp = int(x * factor)
             temp = float(temp)/factor
             list[index] = temp
-        print "precision reset list: " + str(list)
+        # print "precision reset list: " + str(list)
         return list
 
     def density_to_time(self, region_map, ranked_list):
