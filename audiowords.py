@@ -64,12 +64,14 @@ class MainWindow:
 
         # this is for the box where you enter the minimum interval of sound
         self.minimum_sound_entry = Entry(self.main_frame, width=10)
+        self.minimum_sound_entry.insert(0, "10000")
         self.minimum_sound_label = Label(self.main_frame, text="minimum sound interval\n(in milliseconds)")
         self.minimum_sound_missing = Label(self.main_frame, text="missing minimum sound interval", fg="red")
 
         # this is for selecting how many lena overlap regions to find
 
         self.top_n_region_entry = Entry(self.main_frame, width=10)
+        self.top_n_region_entry.insert(0, "5")
         self.top_n_region_label = Label(self.main_frame, text="# of regions")
         self.top_n_missing_label = Label(self.main_frame, text="enter n", fg="red")
 
