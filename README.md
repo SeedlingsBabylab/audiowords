@@ -9,6 +9,31 @@ This program automates a few tasks involved in ignoring silent regions within CL
 $ python audiowords.py
 ```
 
+
+###new process
+
+1. Click "Load All" and select the main CLAN file (e.g 16_08.cex)
+
+
+
+
+The program will load and generate the other files that are necessary, running through all the steps at once.
+It assumes that all the necessary files are within the same directory as the original CLAN file that was loaded.
+It will output the silences_added and subregions exports to this same directory.
+The old functionality is still in place, so if you want to load/export
+everything one at a time, you can still do that. You should read the directions to the old process
+because some of the elements are still relevant (like working with audacity regions)
+
+The format it's expecting files to be in:
+
+    16_08.cex
+    16_08_silences.txt
+    16_08_lena5min.csv
+    16_08_silences_added.cex
+    16_08_subregions.cex
+
+###old process (still functional)
+
 1. a window called AudioWords should pop up. Set the minimum sound interval to 10000 (this is 10s) [you may edit this value later; or if you already checked the silences in audacity, make this 0].
   * What this does is find stretches of this length that interrupt longer silences, and makes new timestamps that ignore them.
 2. Click 'Load Sound Regions' to select the audacity regions file you made, e.g. 01_06_audacityregions.txt
@@ -25,5 +50,8 @@ $ python audiowords.py
   * The properly named clan file (e.g. 01_06.fxblts.cex)
   * The silences file (e.g. 01_06_silences.txt)
   * The silences_added clan file (e.g. 01_06_silences_added.cex). This is the file you will start with for your annotation
+
+
+
 
 ![audiowords](data/audiowords_screenshot.png)

@@ -513,10 +513,10 @@ class ClanFileParser:
                     # XYZ is strictly > ABC. If not we print warning
 
                     if current_clan_interval[1] < current_clan_interval[0]:
-                        print "\n\n***************************************************************************"
-                        print "timestamp onset > offset: {}_{}:   CLAN file line# {}"\
+                        print "\n\n***********************************************************************"
+                        print "timestamp onset > offset: {}_{}:   CLAN line# {}"\
                             .format(interval[0],
                                     interval[1],
                                     index)
-                        print "***************************************************************************\n"
+                        print "***********************************************************************\n"
 
