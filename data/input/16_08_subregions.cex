@@ -1,4 +1,3 @@
-@Font:	Win95::-13:0
 @UTF8
 @Begin
 @Coder:	Automatic Transcription using Lena software
@@ -7337,7 +7336,7 @@
 *TVF:	14696940_14697940
 *FAF:	14697940_14698940
 *NOF:	14698940_14700000
-%com:  subregion 2 of 5 starts at 14700000 -- previous timestamp adjusted: was 14700450
+%com:  subregion 2 of 5 starts at 14700000 -- previous timestamp adjusted: was 14700450 [contains silent region: [14941006.228, 15045946.661] ]
 *FAN:	14700450_14702010
 %com:	|RC|283|113|1|CIC|NT|FH|
 *CHF:	&=vfx 14702010_14702150
@@ -7496,8 +7495,10 @@
 *CXN:	14934400_14935340
 %com:	|EC|294|114|0|XM|NT|FI|
 *SIL:	14935340_14941006
-*TVF:	14941006_15045946
-*FAN:	15045946_15052700
+%com:  silence 2 of 6 starts at 14941006.228 -- previous timestamp adjusted: was 15046430
+*TVF:	15046430_15045946
+%com:  silence 2 of 6 ends at 15045946.661 -- previous timestamp adjusted: was 15050800
+*FAN:	15050800_15052700
 %com:	|EC|295|114|0|AMF|NT|FI|
 *TVF:	15052700_15058760
 *SIL:	15058760_15059560
@@ -21659,7 +21660,7 @@
 %com:  subregion 4 of 5 ends at 34800000 -- previous timestamp adjusted: was 34800750
 %com:	|BC|902|344|0|AICM|NT|FI|
 *FAN:	34800750_34800000
-%com:  subregion 5 of 5 starts at 34800000 -- previous timestamp adjusted: was 34802060. lowest ranked region; skip unless necessary
+%com:  subregion 5 of 5 starts at 34800000 -- previous timestamp adjusted: was 34802060 - lowest ranked region; [contains silent region: [35243071.926, 35604670.0] ]
 %com:	|RC|902|344|0|AICM|NT|FI|
 *MAN:	34802060_34803640
 %com:	|RC|902|344|0|AICM|NT|FI|
@@ -24294,7 +24295,7 @@
 *TVN:	38395170_38397660
 *TVN:	38397660_38399420
 *TVN:	38399420_38400000
-%com:  subregion 5 of 5 ends at 38400000 -- previous timestamp adjusted: was 38402670 - lowest ranked region; [inside silent region: [38380009.258, 57600140.0] ]
+%com:  subregion 5 of 5 ends at 38400000 -- previous timestamp adjusted: was 38402670 - lowest ranked region; [contains silent region: [38380009.258, 57600140.0] ]
 *TVN:	38402670_38410560
 *TVN:	38410560_38411560
 *TVN:	38411560_38413150

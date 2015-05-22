@@ -257,13 +257,13 @@ class ClanFileParser:
                     # We check to make sure that in interval ABC_XYZ,
                     # XYZ is strictly > ABC. If not we print warning to
                     # GUI and raise exception, halting the clan file processing
-                    if current_clan_interval[1] < current_clan_interval[0]:
-                        print "\n\n***************************************************************************"
-                        print "timestamp interval is malformed: {}_{}:   CLAN file line# {}"\
-                            .format(interval[0],
-                                    interval[1],
-                                    index)
-                        print "***************************************************************************\n"
+                    # if current_clan_interval[1] < current_clan_interval[0]:
+                    #     print "\n\n***************************************************************************"
+                    #     print "timestamp interval is malformed: {}_{}:   CLAN file line# {}"\
+                    #         .format(interval[0],
+                    #                 interval[1],
+                    #                 index)
+                    #     print "***************************************************************************\n"
 
                     if (curr_region_start > curr_silence.start) and\
                             (curr_region_start < curr_silence.end):
@@ -475,4 +475,48 @@ class ClanFileParser:
                     output.write(line + "\n")
 
         output.close()
+        self.find_interval_errors()
+
+
+    def find_interval_errors(self):
+
+        # regex object to parse out the timestamp
+        # interval from each line
+
+        interval_regx = re.compile("(\d+_\d+)")
+        current_clan_interval = [None, None]
+
+        with open(self.export_clan_file, "rU") as file:
+
+            for index, raw_line in enumerate(file):
+                # get rid of preceding and trailing whitespace from the line
+                line = raw_line.strip()
+
+
+                # We only write comments after lines with " *XYZ: " prefixes.
+                # The check for curr_silence ensures that there is still a
+                # silence waiting to be written
+                if line.startswith("*"):
+                    # parse out the part of the line with the interval in it
+                    interval_string = interval_regx.search(line).group()
+                    # tokenize that string into an array of 2 strings ["123", "456"]
+                    interval = interval_string.split("_")
+
+                    # assign the integer representation of that interval to
+                    # the current_clan_interval array. This keeps track of the
+                    # timepoints we're currently dealing with as we iterate
+                    # over the file
+                    current_clan_interval[0] = int(interval[0])
+                    current_clan_interval[1] = int(interval[1])
+
+                    # We check to make sure that in interval ABC_XYZ,
+                    # XYZ is strictly > ABC. If not we print warning
+
+                    if current_clan_interval[1] < current_clan_interval[0]:
+                        print "\n\n***************************************************************************"
+                        print "timestamp onset > offset: {}_{}:   CLAN file line# {}"\
+                            .format(interval[0],
+                                    interval[1],
+                                    index)
+                        print "***************************************************************************\n"
 

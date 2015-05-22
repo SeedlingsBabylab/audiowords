@@ -5,6 +5,8 @@ from silences import *
 from clanfile import *
 from overlaps import *
 
+import os
+
 class MainWindow:
 
     def __init__(self, master):
@@ -16,6 +18,9 @@ class MainWindow:
         self.main_frame.pack()              # pack() basically sets up/inserts the element (turns it on)
 
         self.silences = []
+
+        self.all_prefix = None
+        self.file_prefix = None
 
         self.sound_regions_file = None
 
@@ -37,8 +42,12 @@ class MainWindow:
                                           text = "Export New Regions",
                                           command = self.export_regions)
 
+        self.load_all_button = Button(self.main_frame,
+                                      text="Load All",
+                                      command=self.load_all)
+
         self.load_clan_button = Button(self.main_frame,
-                                       text = "Load Clan File",
+                                       text = "Load CLAN",
                                        command=self.load_clan)
 
         self.load_lena_button = Button(self.main_frame,
@@ -54,7 +63,7 @@ class MainWindow:
                                         command=self.clear_lena)
 
         self.export_clan_button = Button(self.main_frame,
-                                         text = "Export Clan File",
+                                         text = "Export CLAN",
                                          command = self.export_clan)
 
 
@@ -85,9 +94,10 @@ class MainWindow:
         # load all the buttons onto the GUI
         self.load_sound_button.grid(row=2, column=0)
         self.export_sound_button.grid(row=3, column=0)
-        self.load_clan_button.grid(row=2, column=1)
-        self.export_clan_button.grid(row=3, column=1)
-        self.clear_clan_button.grid(row=4, column=1)
+        self.load_all_button.grid(row=2, column=1)
+        self.load_clan_button.grid(row=3, column=1)
+        self.export_clan_button.grid(row=4, column=1)
+        self.clear_clan_button.grid(row=5, column=1)
         self.load_lena_button.grid(row=2, column=2)
         self.export_overlaps_button.grid(row=3, column=2)
         self.clear_lena_button.grid(row=4, column=2)
@@ -143,7 +153,7 @@ class MainWindow:
 
 
 
-    def load_regions(self):
+    def load_regions(self, path=""):
 
         # check for empty minimum sound box
         if not self.minimum_sound_entry.get():
@@ -154,9 +164,11 @@ class MainWindow:
         self.minimum_sound_missing.grid_remove()
 
         # set the path to the audacity regions with a popup directory widget
-        self.sound_regions_file = tkFileDialog.askopenfilename()
-        self.sound_file_missing.grid_remove()
-
+        if path == "":
+            self.sound_regions_file = tkFileDialog.askopenfilename()
+            self.sound_file_missing.grid_remove()
+        else:
+            self.sound_regions_file = path
         # extract the value provided as the minimum sound length
         minimum_sound = float(self.minimum_sound_entry.get())
 
@@ -211,7 +223,61 @@ class MainWindow:
                     export_file.write("{0:.6f}\t{1:.6f}\t{2}\n".format(entry[0]/1000,
                                                                        entry[1]/1000,
                                                                        index + 1))
+    def load_all(self):
+        """
+        This is an all-in-one function that asks for the initial
+        CLAN file, and then figures out what the remaining files
+        need to be loaded and processed. It assumes that files will
+        be named in the following format:
 
+
+        16_08.cex     <- this is the file to be loaded.
+                         the rest will be loaded/generated automatically
+
+        16_08_silences.txt
+        16_08_lena5min.csv
+        16_08_silences_added.cex
+        16_08_subregions.cex
+
+        :return:
+        """
+        self.clan_formatting_error.grid_remove()
+        self.clan_file = tkFileDialog.askopenfilename()
+
+        if self.clan_file != "":
+            self.clan_loaded_label.grid(row=1, column=1)
+
+        # pull out the prefix for the path and the filename
+        #   e.g.
+        #       all_prefix  = /Users/ebergelson/Desktop/Github/SeedlingsBabylab/audiowords/data/input
+        #       file_prefix = 16_08
+        self.all_prefix = os.path.split(self.clan_file)[0]
+        self.file_prefix = os.path.split(self.clan_file)[1][0:5]
+
+        # print "clan file path: " + self.clan_file
+        # print "all prefix: " + self.all_prefix
+        # print "file prefix: " + self.file_prefix
+
+        silences_filename = self.file_prefix + "_silences.txt"
+
+        # Call load_regions with the
+        self.load_regions(path=os.path.join(self.all_prefix, silences_filename))
+
+        silences_added_filename = self.file_prefix + "_silences_added.cex"
+        silences_added_path = os.path.join(self.all_prefix, silences_added_filename)
+
+
+        self.export_clan(path=silences_added_path)
+
+        self.clan_file = silences_added_path
+
+        lena_filename = self.file_prefix + "_lena5min.csv"
+
+        self.load_lena(path=os.path.join(self.all_prefix, lena_filename))
+
+        subregions_filename = self.file_prefix + "_subregions.cex"
+
+        self.export_overlaps(path=os.path.join(self.all_prefix, subregions_filename))
 
     def load_clan(self):
         # get path for initial clan file to be processed,
@@ -221,10 +287,13 @@ class MainWindow:
         if self.clan_file != "":
             self.clan_loaded_label.grid(row=1, column=1)
 
-    def export_clan(self):
-        # get path for new/modified clan file
-        self.export_clan_file = tkFileDialog.asksaveasfilename()
+    def export_clan(self, path=""):
 
+        # get path for new/modified clan file
+        if path == "":
+            self.export_clan_file = tkFileDialog.asksaveasfilename()
+        else:
+            self.export_clan_file = path
         # We surround the ClanFileParser operations
         # in a try: except: block because in some unlikely
         # circumstances the clan file can be formatted incorrectly,
@@ -249,10 +318,13 @@ class MainWindow:
 
         self.silence_list_box.delete(0, END)
 
-    def load_lena(self):
+    def load_lena(self, path=""):
         self.clear_lena()
-        self.lena_file = tkFileDialog.askopenfilename()
 
+        if path == "":
+            self.lena_file = tkFileDialog.askopenfilename()
+        else:
+            self.lena_file = path
 
         if not self.top_n_region_entry.get():
 
@@ -306,7 +378,7 @@ class MainWindow:
         self.ctc_cvc_box.delete(0, END)
 
 
-    def export_overlaps(self):
+    def export_overlaps(self, path=""):
         """
         This gets called after the silences have been processed and
         inserted into the clan file. The loaded clan file should be
@@ -316,7 +388,10 @@ class MainWindow:
          silence regions from the previous silence inserting step.
         :return:
         """
-        overlaps_export_file = tkFileDialog.asksaveasfilename()
+        if path == "":
+            overlaps_export_file = tkFileDialog.asksaveasfilename()
+        else:
+            overlaps_export_file = path
 
         ClanFileParser(self.clan_file, overlaps_export_file).\
                         insert_overlaps(self.overlaps.ranked_ctc_cvc,
