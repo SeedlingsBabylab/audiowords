@@ -29,8 +29,10 @@ The format it's expecting files to be in:
     16_08.cex
     16_08_silences.txt
     16_08_lena5min.csv
-    16_08_silences_added.cex
-    16_08_subregions.cex
+
+    16_08_silences_added.cex   <--////////////////////////////////////////
+                                 // These will be output by audiowords //
+    16_08_subregions.cex     <--////////////////////////////////////////
 
 ###old process (still functional)
 
