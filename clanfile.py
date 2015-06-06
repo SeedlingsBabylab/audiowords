@@ -228,7 +228,7 @@ class ClanFileParser:
 
             # We iterate over the clan file line by line
             for index, raw_line in enumerate(file):
-                # get rid of preceding and trailing whitespace from the line
+                # get rid of leading and trailing whitespace from the line
                 line = raw_line.strip()
 
 
