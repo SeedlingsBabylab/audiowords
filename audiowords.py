@@ -303,10 +303,10 @@ class MainWindow:
         labeled_track_filename = "Label_Track.txt"
         silences_filename = self.file_prefix + "_silences.txt"
 
-        # Call load_regions with the
+        # Call load_regions with the Label_Track file
         self.load_regions(path=os.path.join(self.all_prefix, labeled_track_filename))
 
-        self.export_regions_chain(silences_filename)
+        self.export_regions_chain(os.path.join(self.all_prefix, silences_filename))
 
         silences_added_filename = self.file_prefix + "_silences_added.cex"
         silences_added_path = os.path.join(self.all_prefix, silences_added_filename)
