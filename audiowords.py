@@ -300,7 +300,7 @@ class MainWindow:
         # print "all prefix: " + self.all_prefix
         # print "file prefix: " + self.file_prefix
 
-        labeled_track_filename = self.file_prefix + "Label_Track.txt"
+        labeled_track_filename = "Label_Track.txt"
         silences_filename = self.file_prefix + "_silences.txt"
 
         # Call load_regions with the
