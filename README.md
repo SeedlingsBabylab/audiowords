@@ -19,7 +19,7 @@ $ python audiowords.py
 
 The program will load and generate the other files that are necessary, running through all the steps at once.
 It assumes that all the necessary files are within the same directory as the original CLAN file that was loaded.
-It will output the silences_added and subregions exports to this same directory.
+It will output the silences.txt regions, silences_added, and subregions exports to this same directory.
 The old functionality is still in place, so if you want to load/export
 everything one at a time, you can still do that. You should read the directions to the old process
 because some of the elements are still relevant (like working with audacity regions)
@@ -27,9 +27,10 @@ because some of the elements are still relevant (like working with audacity regi
 The format it's expecting files to be in:
 
     16_08.cex
-    16_08_silences.txt
     16_08_lena5min.csv
+    Label_Track.txt
 
+    16_08_silences.txt         <---////////////////////////////////////////
     16_08_silences_added.cex   <--////////////////////////////////////////
                                  // These will be output by audiowords //
     16_08_subregions.cex     <--////////////////////////////////////////
