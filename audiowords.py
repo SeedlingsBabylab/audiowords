@@ -223,6 +223,48 @@ class MainWindow:
                     export_file.write("{0:.6f}\t{1:.6f}\t{2}\n".format(entry[0]/1000,
                                                                        entry[1]/1000,
                                                                        index + 1))
+
+    def export_regions_chain(self, path):
+
+        # check to make sure the initial regions have been loaded
+        # and a SilenceParser object has been constructed, otherwise
+        # printing warnings and throw an exception
+        # if self.silence_parser is None:
+        #     self.minimum_sound_missing.grid_remove()
+        #     self.sound_file_missing.grid(row=7, column=0)
+        #     raise Exception("You need to load the audacity sound regions first")
+        #
+        # self.sound_file_missing.grid_remove()
+
+        # get path to new regions export file with a popup directory widget
+        self.silence_export_file = path
+
+        # run the silence parsing anew for each export_silence(),
+        # so that the user doesn't have to reload the initial
+        # regions every time they need different result
+        minimum_sound = float(self.minimum_sound_entry.get())
+        self.silence_parser = SilenceParser(self.sound_regions_file, minimum_sound)
+
+        # update the silence preview box
+        self.silence_list_box.delete(0, END)
+        for index, item in enumerate(self.silence_parser.silences):
+            self.silence_list_box.insert(index, str(item) + " [{}] ".format(index + 1))
+
+        # write out each region to a new file (silence_export_file)
+        with open(self.silence_export_file, "w") as export_file:
+
+            for index, entry in enumerate(self.silence_parser.sounds):
+
+                # handle the [End] region as a special case
+                if (index + 1) == len(self.silence_parser.sounds)\
+                    and entry[0] == entry[1]:
+
+                    export_file.write("{0:.6f}\t{1:.6f}\t[End]\n".format(entry[0]/1000,
+                                                                         entry[1]/1000))
+                else:
+                    export_file.write("{0:.6f}\t{1:.6f}\t{2}\n".format(entry[0]/1000,
+                                                                       entry[1]/1000,
+                                                                       index + 1))
     def load_all(self):
         """
         This is an all-in-one function that asks for the initial
@@ -258,10 +300,13 @@ class MainWindow:
         # print "all prefix: " + self.all_prefix
         # print "file prefix: " + self.file_prefix
 
+        labeled_track_filename = self.file_prefix + "Label_Track.txt"
         silences_filename = self.file_prefix + "_silences.txt"
 
         # Call load_regions with the
-        self.load_regions(path=os.path.join(self.all_prefix, silences_filename))
+        self.load_regions(path=os.path.join(self.all_prefix, labeled_track_filename))
+
+        self.export_regions_chain(silences_filename)
 
         silences_added_filename = self.file_prefix + "_silences_added.cex"
         silences_added_path = os.path.join(self.all_prefix, silences_added_filename)
