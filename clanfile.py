@@ -10,9 +10,6 @@ class ClanFileParser:
         self.silences_inserted = False
         self.overlaps_inserted = False
 
-
-
-
     def insert_silences(self, silences):
 
         # we initialize a queue of silences using the
@@ -22,7 +19,6 @@ class ClanFileParser:
 
         # open the export clan file
         output = open(self.export_clan_file, "w")
-
 
         with open(self.clan_file, "rU") as file:
 
@@ -46,7 +42,6 @@ class ClanFileParser:
             for index, raw_line in enumerate(file):
                 # get rid of preceding and trailing whitespace from the line
                 line = raw_line.strip()
-
 
                 # We only write comments after lines with " *XYZ: " prefixes.
                 # The check for curr_silence ensures that there is still a
@@ -154,7 +149,6 @@ class ClanFileParser:
 
         output.close()
 
-
     def insert_overlaps(self, region_values, region_map, silences):
         """
 
@@ -171,8 +165,6 @@ class ClanFileParser:
         lowest_region = region_values[len(region_values) - 1]
         offset_list = region_values # this is a list of interval offsets
 
-
-
         # for index, x in enumerate(region_values):
         #     for key, value in region_map.items():
         #         if value == x:
@@ -186,12 +178,9 @@ class ClanFileParser:
         region_queue = deque(sorted_offsets)
         silence_queue = deque(silences)
 
-
-
         # print "region values: " + str(region_values)
         # print "sorted_offsets: " + str(sorted_offsets)
         # print "region queue: " + str(region_queue)
-
 
         with open(self.clan_file, "rU") as file:
 
@@ -231,7 +220,6 @@ class ClanFileParser:
                 # get rid of leading and trailing whitespace from the line
                 line = raw_line.strip()
 
-
                 # We only write comments after lines with " *XYZ: " prefixes.
                 # The check for curr_silence ensures that there is still a
                 # silence waiting to be written
@@ -249,7 +237,6 @@ class ClanFileParser:
                     current_clan_interval[1] = int(interval[1])
 
                     #print "clan[0]: " + str(current_clan_interval[0]) + "clan[1]: " + str(current_clan_interval[1]) + "    curr_region_start: " + str(curr_region_start)
-
 
                     # Handle special case for 0 offset
                     if curr_region_start == 0:
@@ -477,7 +464,6 @@ class ClanFileParser:
         output.close()
         self.find_interval_errors()
 
-
     def find_interval_errors(self):
 
         # regex object to parse out the timestamp
@@ -491,7 +477,6 @@ class ClanFileParser:
             for index, raw_line in enumerate(file):
                 # get rid of preceding and trailing whitespace from the line
                 line = raw_line.strip()
-
 
                 # We only write comments after lines with " *XYZ: " prefixes.
                 # The check for curr_silence ensures that there is still a

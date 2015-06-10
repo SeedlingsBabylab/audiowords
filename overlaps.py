@@ -107,9 +107,7 @@ class Overlaps:
 
                     self.dataset.data.append((meaningful, awc_actual, ctc_actual, cvc_actual))
 
-
                     #self.dataset.hours()
-
 
             #     print
             #     print "timestamp: " + line[10]
@@ -202,7 +200,6 @@ class Overlaps:
             y += 1  # bump
             hour_buffer = self.dataset.data[x:y]  # re-slice
 
-
         # pull out the N'th index of each element in "regions",
         # which is a list of tuples, with list comprehensions.
         # Each tuple has the average value for the hour chunk
@@ -246,8 +243,6 @@ class Overlaps:
         # print
         # print
 
-
-
     def rank_list(self, list, top_n):
         """
         This builds the regions map, resets decimal precision so
@@ -281,7 +276,6 @@ class Overlaps:
         filtered_list = self.filter_overlaps(sorted_list, region_map, top_n)
         return (region_map, filtered_list)
 
-
     def filter_overlaps(self, list, map, top_n):
         """
         This passes through the ranked offset list and uses the region
@@ -297,10 +291,7 @@ class Overlaps:
         # a certain magnitude
         offset_lists = []
 
-
-
         last_interval = None
-
 
         for index, x in enumerate(list):
             # this is the temporary list that will be pushed into the
@@ -326,9 +317,7 @@ class Overlaps:
                     #last_result = results[len(results)-1]
 
         # print "results: " + str(results)
-
         return results
-
 
     def overlapping(self, previous_regions, this_start):
         """
