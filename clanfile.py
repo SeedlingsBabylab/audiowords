@@ -439,7 +439,7 @@ class ClanFileParser:
                                 curr_region = None
                             continue
 
-                if current_clan_interval[1] >= curr_silence.end: # this is where the bug is
+                if current_clan_interval[1] >= curr_silence.end and silence_queue:
                     #print "queue pre-pop: " + str(silence_queue)
                     curr_silence = silence_queue.popleft()
                 # this is a check for a special case. If we've reached @End,
