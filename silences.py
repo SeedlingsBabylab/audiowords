@@ -21,8 +21,8 @@ class SilenceParser:
                 # into an array of floats called sound
                 sound = [float(entries[0])*1000, float(entries[1])*1000]
 
-                if sound[0] == sound[1]:
-                    continue
+                # if sound[0] == sound[1]:
+                #     continue
                 # if the length of the sound is greater than the
                 # minimum sound length, or entry is an [End] marker,
                 # add it to the sounds[], which will be returned
@@ -67,6 +67,11 @@ class SilenceParser:
                 #
                 # The values are converted back to seconds before construction.
                 # Then, add this Silence object to the silences[] we are going to return
+                if curr_sound[0] == curr_sound[1]:
+                    if curr_sound[0] - prev_sound[1] > 0:
+                        silence = Silence(prev_sound[1]/1000, curr_sound[0]/1000, num)
+                    else:
+                        continue
                 silence = Silence(prev_sound[1]/1000, curr_sound[0]/1000, num)
                 silences.append(silence)
 
