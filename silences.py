@@ -41,6 +41,9 @@ class SilenceParser:
 
         num = 1
 
+        if len(sounds) == 1:
+            silences.append(Silence(1, 3, 1))
+            return silences
         # iterating through an array of sound intervals.
         # this was provided by the parse_sounds() function
         # earlier
