@@ -41,7 +41,12 @@ class SilenceParser:
 
         num = 1
 
-        if len(sounds) == 1:
+        # assuming all Label_Track.txt files end with a region indicating
+        # the length of the track, with equal onset/offset, having only 2
+        # sounds implies that there is only 1 sound region apart from this
+        # end marker. In that case, we add an artificial silence to keep the
+        # script running. Quick fix for now.
+        if len(sounds) == 2:
             silences.append(Silence(1, 3, 1))
             return silences
         # iterating through an array of sound intervals.
