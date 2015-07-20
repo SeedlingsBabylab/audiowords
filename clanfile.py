@@ -79,7 +79,7 @@ class ClanFileParser:
                                                   str(int(curr_silence.start))) + "\n")
 
                         # insert the comment immediately after the altered clan entry
-                        output.write("%com:  silence {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
+                        output.write("%com:\tsilence {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.start,
@@ -106,7 +106,7 @@ class ClanFileParser:
                                                   str(int(curr_silence.end))) + "\n")
 
                         # then we write the end silence comment right afterwards
-                        output.write("%com:  silence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
+                        output.write("%com:\tsilence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.end,
@@ -134,7 +134,7 @@ class ClanFileParser:
                 # last end-silence comment in before writing out the @End line
                 if line.startswith("@End") and not end_written:
 
-                    output.write("%com:  silence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
+                    output.write("%com:\tsilence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.end,
@@ -283,7 +283,7 @@ class ClanFileParser:
                                                       str(current_clan_interval[0]) + "_" + \
                                                       str(int(curr_region_start))) + "\n")
                             if (curr_region == lowest_region):
-                                output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
+                                output.write("%com:\tsubregion {} of {} starts at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
                                                         len(region_values),
                                                         curr_region_start,
@@ -292,7 +292,7 @@ class ClanFileParser:
                                                         curr_silence.end))
                             else:
                                 # insert the comment immediately after the altered clan entry
-                                output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {} [contains silent region: [{}, {}] ]\n"
+                                output.write("%com:\tsubregion {} of {} starts at {} -- previous timestamp adjusted: was {} [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
                                                         len(region_values),
                                                         curr_region_start,
@@ -316,14 +316,14 @@ class ClanFileParser:
                                                       str(int(curr_region_start))) + "\n")
 
                             if (curr_region == lowest_region):
-                                output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
+                                output.write("%com:\tsubregion {} of {} starts at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
                                                 .format(region_number,
                                                         len(region_values),
                                                         curr_region_start,
                                                         current_clan_interval[1]))
                             else:
                                 # insert the comment immediately after the altered clan entry
-                                output.write("%com:  subregion {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
+                                output.write("%com:\tsubregion {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
                                                 .format(region_number,
                                                         len(region_values),
                                                         curr_region_start,
@@ -351,7 +351,7 @@ class ClanFileParser:
                                                       str(int(curr_region_end))) + "\n")
 
                             if curr_region == lowest_region:
-                                output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
+                                output.write("%com:\tsubregion {} of {} ends at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
                                                         len(region_values),
                                                         curr_region_end,
@@ -361,7 +361,7 @@ class ClanFileParser:
 
                             else:
                                 # then we write the end subregion comment right afterwards
-                                output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {} [contains silent region: [{}, {}] ]\n"
+                                output.write("%com:\tsubregion {} of {} ends at {} -- previous timestamp adjusted: was {} [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
                                                         len(region_values),
                                                         curr_region_end,
@@ -404,14 +404,14 @@ class ClanFileParser:
                                                       str(int(curr_region_end))) + "\n")
 
                             if (curr_region == lowest_region):
-                                output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
+                                output.write("%com:\tsubregion {} of {} ends at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
                                                 .format(region_number,
                                                         len(region_values),
                                                         curr_region_end,
                                                         current_clan_interval[1]))
                             else:
                                 # then we write the end subbregion comment right afterwards
-                                output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
+                                output.write("%com:\tsubregion {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
                                                 .format(region_number,
                                                         len(region_values),
                                                         curr_region_end,
@@ -447,7 +447,7 @@ class ClanFileParser:
                 # last end-silence comment in before writing out the @End line
                 if line.startswith("@End") and not end_written:
 
-                    output.write("%com:  subregion {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
+                    output.write("%com:\tsubregion {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
                                      .format(region_number,
                                              len(region_values),
                                              curr_region_end,

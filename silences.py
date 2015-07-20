@@ -53,7 +53,6 @@ class SilenceParser:
         # this was provided by the parse_sounds() function
         # earlier
         for sound in sounds:
-
             curr_sound = sound
             # for the first iteration, we set prev_sound as the first
             # sound and jump to the next iteration. This provides a trailing
