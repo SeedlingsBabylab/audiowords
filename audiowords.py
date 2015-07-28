@@ -43,7 +43,7 @@ class MainWindow:
                                           command = self.export_regions)
 
         self.load_all_button = Button(self.main_frame,
-                                      text="Load All",
+                                      text="Load All (cex)",
                                       command=self.load_all)
         # for the new clan format
         self.load_all_cha_button = Button(self.main_frame,
