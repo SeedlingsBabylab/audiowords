@@ -85,34 +85,24 @@ class SilenceParser:
         return silences
 
     def parse_silences2(self, sounds):
-
         silences = []
-
         prev_sound = None
         curr_sound = None
-
         num = 1
-
         # set start marker at 1 millisecond
         start = [1, 1]
 
         for sound in sounds:
-
             if prev_sound is None:
                 prev_sound = start
-
             curr_sound = sound
-
             silence = Silence(float(prev_sound[1])/1000, curr_sound[0]/1000, num)
-
             # silences less than 15 milliseconds are probably rounding errors
             if silence.end - silence.start > 15:
                 silences.append(silence)
+                num += 1
             print "silence #" + str(num) + " " + str(silence)
-
             prev_sound = curr_sound
-            num += 1
-
         return silences
 
 
