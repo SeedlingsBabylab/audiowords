@@ -63,7 +63,6 @@ class SilenceParser:
                 prev_sound = curr_sound
                 continue
             else:
-
                 # Construct silence object, using:
                 #
                 #    start = prev_sound end
