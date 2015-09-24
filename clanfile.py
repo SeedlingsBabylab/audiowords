@@ -852,7 +852,7 @@ class ClanFileParser:
 
                     # Handle special case for 0 offset
                     if curr_region_start == 0:
-                        curr_region_start = 1 # avoid 0 millisecond. start at 1 millisecond.
+                        curr_region_start = 10 # avoid 0 millisecond. start at 1 millisecond.
                     # We check to make sure that in interval ABC_XYZ,
                     # XYZ is strictly > ABC. If not we print warning to
                     # GUI and raise exception, halting the clan file processing
