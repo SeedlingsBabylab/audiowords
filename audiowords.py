@@ -415,9 +415,11 @@ class MainWindow:
             ClanFileParser(self.clan_file, self.export_clan_file)\
                 .insert_silences(self.silence_parser.silences)
         except Exception, e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
             self.clan_loaded_label.grid_remove()
             self.clan_formatting_error.grid(row=1, column=1)
             print e.args
+            print(exc_type, exc_tb.tb_lineno)
 
     def export_clan_cha(self, path=""):
         # get path for new/modified clan file
@@ -433,9 +435,11 @@ class MainWindow:
             ClanFileParser(self.clan_file, self.export_clan_file)\
                 .insert_silences_cha(self.silence_parser.silences)
         except Exception, e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
             self.clan_loaded_label.grid_remove()
             self.clan_formatting_error.grid(row=1, column=1)
             print e.args
+            print(exc_type, exc_tb.tb_lineno)
 
     def clear_clan(self):
 

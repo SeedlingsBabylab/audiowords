@@ -28,8 +28,8 @@
 @Date:	05-JUL-2015
 @Time Duration:	10:16:35-10:16:35
 @Bg:	Pause 1
-*SIL:	0 . 0_1
-%xcom:	subregion 1 of 5 starts at 1 -- previous timestamp adjusted: was 800
+*SIL:	0 . 0_10
+%xcom:	subregion 1 of 5  (ranked 1 of 5)  starts at 10 -- previous timestamp adjusted: was 800
 %xdb:	average_dB="-38.66" peak_dB="-20.63"
 *NOF:	0 . 800_2460
 %xdb:	average_dB="-38.51" peak_dB="-21.34"
@@ -6238,7 +6238,7 @@
 *NOF:	0 . 3598010_3599470
 %xdb:	average_dB="-45.17" peak_dB="-33.76"
 *TVF:	0 . 3599470_3600000
-%xcom:	subregion 1 of 5 ends at 3600000 -- previous timestamp adjusted: was 3600470
+%xcom:	subregion 1 of 5  (ranked 1 of 5)  ends at 3600000 -- previous timestamp adjusted: was 3600470
 %xdb:	average_dB="-46.33" peak_dB="-32.94"
 *NOF:	0 . 3600470_3601810
 %xdb:	average_dB="-25.36" peak_dB="-14.06"
@@ -10193,7 +10193,7 @@
 *SIL:	0 . 6298160_6298960
 %xdb:	average_dB="-66.49" peak_dB="-52.74"
 *NOF:	0 . 6298960_6300000
-%xcom:	subregion 2 of 5 starts at 6300000 -- previous timestamp adjusted: was 6300280
+%xcom:	subregion 2 of 5  (ranked 2 of 5)  starts at 6300000 -- previous timestamp adjusted: was 6300280
 %xdb:	average_dB="-39.13" peak_dB="-20.26"
 @Eg:	Pause 225
 @Bg:	Conversation 225
@@ -16226,7 +16226,7 @@
 %com:	|RC|378|165|0|CIC|NT|FH|
 %xdb:	average_dB="-14.75" peak_dB="-11.04"
 *CHN:	&=crying . 9899500_9900000
-%xcom:	subregion 2 of 5 ends at 9900000 -- previous timestamp adjusted: was 9900280
+%xcom:	subregion 2 of 5  (ranked 2 of 5)  ends at 9900000 -- previous timestamp adjusted: was 9900280
 %xdb:	average_dB="-19.53" peak_dB="-11.31"
 *OLN:	0 . 9900280_9901600
 %xdb:	average_dB="-16.31" peak_dB="-12.53"
@@ -16534,7 +16534,7 @@
 *NOF:	0 . 10174900_10176000
 %xdb:	average_dB="-37.81" peak_dB="-25.90"
 *SIL:	0 . 10176000_10177340
-%xcom:	silence 2 of 1 starts at 10177340.13 -- previous timestamp adjusted: was 10187110
+%xcom:	silence 1 of 1 starts at 10177340.13 -- previous timestamp adjusted: was 10187110
 %xdb:	average_dB="-43.05" peak_dB="-26.01"
 *NOF:	0 . 10187110_10188910
 %xdb:	average_dB="-40.77" peak_dB="-32.12"
@@ -19239,7 +19239,7 @@
 *TVF:	0 . 17560670_17561710
 %xdb:	average_dB="-46.95" peak_dB="-37.14"
 *SIL:	0 . 17561710_17562230
-%xcom:	silence 2 of 1 ends at 17562230.182 -- previous timestamp adjusted: was 17563490
+%xcom:	silence 1 of 1 ends at 17562230.182 -- previous timestamp adjusted: was 17563490
 %xdb:	average_dB="-50.84" peak_dB="-39.11"
 *TVF:	0 . 17563490_17564550
 %xdb:	average_dB="-49.83" peak_dB="-38.92"
@@ -19436,7 +19436,7 @@
 *SIL:	0 . 17691560_17699270
 %xdb:	average_dB="-52.71" peak_dB="-38.82"
 *NOF:	0 . 17699270_17700000
-%xcom:	subregion 3 of 5 starts at 17700000 -- previous timestamp adjusted: was 17700510
+%xcom:	subregion 3 of 5  (ranked 3 of 5)  starts at 17700000 -- previous timestamp adjusted: was 17700510
 %xdb:	average_dB="-20.98" peak_dB="-12.24"
 *OLN:	0 . 17700510_17702540
 %xdb:	average_dB="-19.69" peak_dB="-12.08"
@@ -24823,7 +24823,7 @@
 *SIL:	0 . 21297710_21298570
 %xdb:	average_dB="-43.97" peak_dB="-40.45"
 *MAN:	&=w7_50 . 21298570_21300000
-%xcom:	subregion 3 of 5 ends at 21300000 -- previous timestamp adjusted: was 21300650
+%xcom:	subregion 3 of 5  (ranked 3 of 5)  ends at 21300000 -- previous timestamp adjusted: was 21300650
 %com:	|RC|524|210|0|AMM|NT|FH|
 %xdb:	average_dB="-32.02" peak_dB="-22.79"
 *OLF:	0 . 21300650_21301480
@@ -26576,7 +26576,7 @@
 *NOF:	0 . 22498090_22499160
 %xdb:	average_dB="-27.09" peak_dB="-12.22"
 *TVN:	0 . 22499160_22500000
-%xcom:	subregion 4 of 5 starts at 22500000 -- previous timestamp adjusted: was 22500160
+%xcom:	subregion 4 of 5  (ranked 4 of 5)  starts at 22500000 -- previous timestamp adjusted: was 22500160
 %xdb:	average_dB="-39.49" peak_dB="-29.66"
 *NOF:	0 . 22500160_22501940
 %xdb:	average_dB="-41.02" peak_dB="-28.34"
@@ -31769,10 +31769,10 @@
 *TVF:	0 . 26095660_26099240
 %xdb:	average_dB="-27.66" peak_dB="-19.11"
 *OLF:	0 . 26099240_26100000
-%xcom:	subregion 4 of 5 ends at 26100000 -- previous timestamp adjusted: was 26100170
+%xcom:	subregion 4 of 5  (ranked 4 of 5)  ends at 26100000 -- previous timestamp adjusted: was 26100170
 %xdb:	average_dB="-26.66" peak_dB="-21.92"
 *MAF:	0 . 26100170_26100000
-%xcom:	subregion 5 of 5 starts at 26100000 -- previous timestamp adjusted: was 26102210. lowest ranked region; skip unless necessary
+%xcom:	subregion 5 of 5   (ranked 5 of 5)  starts at 26100000 -- previous timestamp adjusted: was 26102210. lowest ranked region; skip unless necessary
 %xdb:	average_dB="-30.03" peak_dB="-22.73"
 *OLF:	0 . 26102210_26103020
 %xdb:	average_dB="-28.85" peak_dB="-21.85"
@@ -36628,5 +36628,5 @@
 %com:	|EC|758|255|0|AIOCM|NT|FI|
 %xdb:	average_dB="-22.18" peak_dB="-11.53"
 @Eg:	Conversation 758
-%xcom:	subregion 5 of 5 ends at 29700000 -- previous timestamp adjusted: was 29588740
+%xcom:	subregion 5 of 5   (ranked 5 of 5)  ends at 29700000 -- previous timestamp adjusted: was 29588740
 @End

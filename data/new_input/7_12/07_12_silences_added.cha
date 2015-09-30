@@ -16530,7 +16530,7 @@
 *NOF:	0 . 10174900_10176000
 %xdb:	average_dB="-37.81" peak_dB="-25.90"
 *SIL:	0 . 10176000_10177340
-%xcom:	silence 2 of 1 starts at 10177340.13 -- previous timestamp adjusted: was 10187110
+%xcom:	silence 1 of 1 starts at 10177340.13 -- previous timestamp adjusted: was 10187110
 %xdb:	average_dB="-43.05" peak_dB="-26.01"
 *NOF:	0 . 10187110_10188910
 %xdb:	average_dB="-40.77" peak_dB="-32.12"
@@ -19235,7 +19235,7 @@
 *TVF:	0 . 17560670_17561710
 %xdb:	average_dB="-46.95" peak_dB="-37.14"
 *SIL:	0 . 17561710_17562230
-%xcom:	silence 2 of 1 ends at 17562230.182 -- previous timestamp adjusted: was 17563490
+%xcom:	silence 1 of 1 ends at 17562230.182 -- previous timestamp adjusted: was 17563490
 %xdb:	average_dB="-50.84" peak_dB="-39.11"
 *TVF:	0 . 17563490_17564550
 %xdb:	average_dB="-49.83" peak_dB="-38.92"

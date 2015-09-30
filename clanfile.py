@@ -1,6 +1,8 @@
 import re
 from collections import deque
 
+from silences import Silence
+
 class ClanFileParser:
 
     def __init__(self, input_path, output_path):
@@ -32,7 +34,8 @@ class ClanFileParser:
             interval_regx = re.compile("(\d+_\d+)")
 
             # pop the first silence off the queue
-            curr_silence = silence_queue.popleft()
+            if silence_queue:
+                curr_silence = silence_queue.popleft()
 
             #initialize the start/end written flags
             start_written = False
@@ -171,8 +174,10 @@ class ClanFileParser:
             interval_regx = re.compile("(\025\d+_\d+)")
 
             # pop the first silence off the queue
-            curr_silence = silence_queue.popleft()
-
+            if silence_queue:
+                curr_silence = silence_queue.popleft()
+            else:
+                curr_silence = None
             #initialize the start/end written flags
             start_written = False
             end_written = False
@@ -418,7 +423,7 @@ class ClanFileParser:
                 # this is a check for a special case. If we've reached @End,
                 # but the end of a silence has not been written, we insert that
                 # last end-silence comment in before writing out the @End line
-                if line.startswith("@End") and not end_written:
+                if line.startswith("@End") and not end_written and (curr_silence is not None):
 
                     output.write("%xcom:\tsilence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
                                      .format(curr_silence.number,
@@ -483,7 +488,8 @@ class ClanFileParser:
             curr_region = region_queue.popleft()
             curr_region_start = curr_region * 5 * 60 * 1000 # convert to milliseconds
             curr_region_end   = curr_region_start + 60 * 60 * 1000 # end is 1 hour from start
-            curr_silence = silence_queue.popleft()
+            if silence_queue:
+                curr_silence = silence_queue.popleft()
 
             # print "curr_region: " + str(curr_region)
             # print "curr_region_start: " + str(curr_region_start)
@@ -801,8 +807,13 @@ class ClanFileParser:
             curr_region = region_queue.popleft()
             curr_region_start = curr_region * 5 * 60 * 1000 # convert to milliseconds
             curr_region_end   = curr_region_start + 60 * 60 * 1000 # end is 1 hour from start
-            curr_silence = silence_queue.popleft()
 
+            if silence_queue:
+                curr_silence = silence_queue.popleft()
+            else:
+                curr_silence = None
+            # else:
+            #     curr_silence = Silence(1, 2, 1)
             # print "curr_region: " + str(curr_region)
             # print "curr_region_start: " + str(curr_region_start)
             # print "curr_region_end: " + str(curr_region_end)
@@ -864,23 +875,24 @@ class ClanFileParser:
                     #                 index)
                     #     print "***************************************************************************\n"
 
-                    if (curr_region_start > curr_silence.start) and\
-                            (curr_region_start < curr_silence.end):
-                        region_start_in_silence = True
-                    else:
-                        region_start_in_silence = False
+                    if curr_silence:
+                        if (curr_region_start > curr_silence.start) and\
+                                (curr_region_start < curr_silence.end):
+                            region_start_in_silence = True
+                        else:
+                            region_start_in_silence = False
 
-                    if (curr_region_end < curr_silence.end) and\
-                            (curr_region_end > curr_silence.start):
-                        region_end_in_silence = True
-                    else:
-                        region_end_in_silence = False
+                        if (curr_region_end < curr_silence.end) and\
+                                (curr_region_end > curr_silence.start):
+                            region_end_in_silence = True
+                        else:
+                            region_end_in_silence = False
 
-                    if (curr_region_start < curr_silence.start) and\
-                            (curr_region_end > curr_silence.end):
-                        region_contains_silence = True
-                    else:
-                        region_contains_silence = False
+                        if (curr_region_start < curr_silence.start) and\
+                                (curr_region_end > curr_silence.end):
+                            region_contains_silence = True
+                        else:
+                            region_contains_silence = False
 
                     # If the currently queued silence starts before the
                     # end of the current clan interval, and start silence has
@@ -1142,24 +1154,24 @@ class ClanFileParser:
                     current_clan_interval[1] = int(interval[1])
 
 
+                    if curr_silence:
+                        if (curr_region_start > curr_silence.start) and\
+                                (curr_region_start < curr_silence.end):
+                            region_start_in_silence = True
+                        else:
+                            region_start_in_silence = False
 
-                    if (curr_region_start > curr_silence.start) and\
-                            (curr_region_start < curr_silence.end):
-                        region_start_in_silence = True
-                    else:
-                        region_start_in_silence = False
+                        if (curr_region_end < curr_silence.end) and\
+                                (curr_region_end > curr_silence.start):
+                            region_end_in_silence = True
+                        else:
+                            region_end_in_silence = False
 
-                    if (curr_region_end < curr_silence.end) and\
-                            (curr_region_end > curr_silence.start):
-                        region_end_in_silence = True
-                    else:
-                        region_end_in_silence = False
-
-                    if (curr_region_start < curr_silence.start) and\
-                            (curr_region_end > curr_silence.end):
-                        region_contains_silence = True
-                    else:
-                        region_contains_silence = False
+                        if (curr_region_start < curr_silence.start) and\
+                                (curr_region_end > curr_silence.end):
+                            region_contains_silence = True
+                        else:
+                            region_contains_silence = False
 
                     # If the currently queued silence starts before the
                     # end of the current clan interval, and start silence has
@@ -1383,9 +1395,10 @@ class ClanFileParser:
 
 
 
-                if current_clan_interval[1] >= curr_silence.end and silence_queue:
+                if curr_silence:
+                    if current_clan_interval[1] >= curr_silence.end and silence_queue:
                     #print "queue pre-pop: " + str(silence_queue)
-                    curr_silence = silence_queue.popleft()
+                        curr_silence = silence_queue.popleft()
                 # this is a check for a special case. If we've reached @End,
                 # but the end of a silence has not been written, we insert that
                 # last end-silence comment in before writing out the @End line
