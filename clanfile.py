@@ -184,6 +184,8 @@ class ClanFileParser:
 
             last_line = ""
 
+            silence_1000_replaced = False
+
             # We iterate over the clan file line by line
             for index, line in enumerate(file):
                 # # get rid of preceding and trailing whitespace from the line
@@ -216,6 +218,12 @@ class ClanFileParser:
                     current_clan_interval[0] = int(interval[0])
                     current_clan_interval[1] = int(interval[1])
 
+                    if curr_silence.start == 1000:
+                        #curr_silence.start = 1000 # avoid 0 millisecond. start at 1000 millisecond.
+                        #print "made silence interval 1000 adjustment"
+                        #print "silence 1000 index: " + str(index)
+                        silence_1000_replaced = True
+
                     # We check to make sure that in interval ABC_XYZ,
                     # XYZ is strictly > ABC. If not we print warning to
                     # GUI and raise exception, halting the clan file processing
@@ -244,6 +252,10 @@ class ClanFileParser:
                         else:
                             output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                                                                                       int(curr_silence.start))))
+
+                        if silence_1000_replaced:
+                            output.write("%xcom:\tsilence comment rewrote interval to 0_1, rewriting to 0_1000\n")
+                            silence_1000_replaced = False   # reset flag
 
                         # insert the comment immediately after the altered clan entry
                         output.write("%xcom:\tsilence {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
@@ -792,6 +804,8 @@ class ClanFileParser:
 
         last_line = ""
 
+        region_1000_replaced = False
+
         with open(self.clan_file, "rU") as file:
 
             # declare the two time interval arrays we're going to
@@ -863,7 +877,10 @@ class ClanFileParser:
 
                     # Handle special case for 0 offset
                     if curr_region_start == 0:
-                        curr_region_start = 10 # avoid 0 millisecond. start at 1 millisecond.
+                        curr_region_start = 1000 # avoid 0 millisecond. start at 1000 millisecond.
+                        #print "made subregion interval 1000 adjustment"
+                        #print "line" + str(index)
+                        region_1000_replaced = True
                     # We check to make sure that in interval ABC_XYZ,
                     # XYZ is strictly > ABC. If not we print warning to
                     # GUI and raise exception, halting the clan file processing
@@ -917,6 +934,11 @@ class ClanFileParser:
                                 output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                                                                                       int(curr_region_start))))
 
+                            if region_1000_replaced:
+                                output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}"\
+                                             .format(current_clan_interval[0], int(curr_region_start)))
+                                region_1000_replaced = False    # reset flag
+
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}  (ranked {} of {})  starts at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
@@ -964,6 +986,10 @@ class ClanFileParser:
                                 output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                                                                                           int(curr_region_start))))
 
+                            if region_1000_replaced:
+                                output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}\n"\
+                                             .format(current_clan_interval[0], int(curr_region_start)))
+                                region_1000_replaced = False
 
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  starts at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"

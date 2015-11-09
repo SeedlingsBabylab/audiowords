@@ -28,8 +28,9 @@
 @Date:	02-JUN-2015
 @Time Duration:	14:42:55-14:42:55
 @Bg:	Pause 1
-*NOF:	0 . 0_1
-%xcom:	silence 1 of 2 starts at 1.0 -- previous timestamp adjusted: was 3540
+*NOF:	0 . 0_1000
+%xcom:	silence comment rewrote interval to 0_1, rewriting to 0_1000
+%xcom:	silence 1 of 2 starts at 1000.0 -- previous timestamp adjusted: was 3540
 %xdb:	average_dB="-27.59" peak_dB="-11.36"
 *OLF:	0 . 3540_4920
 %xdb:	average_dB="-24.72" peak_dB="-10.52"
@@ -19607,6 +19608,7 @@
 *NOF:	0 . 14062350_14064210
 %xdb:	average_dB="-29.94" peak_dB="-17.86"
 *SIL:	0 . 14064210_14066750
+%xcom:	silence comment rewrote interval to 0_1, rewriting to 0_1000
 %xcom:	silence 2 of 2 starts at 14066750.0 -- previous timestamp adjusted: was 14233340
 %xdb:	average_dB="-46.04" peak_dB="-16.40"
 *CHF:	0  14233340_14233470

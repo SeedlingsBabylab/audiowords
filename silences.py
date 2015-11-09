@@ -88,8 +88,8 @@ class SilenceParser:
         prev_sound = None
         curr_sound = None
         num = 1
-        # set start marker at 1 millisecond
-        start = [10, 10]
+        # set start marker at 1000 millisecond
+        start = [1000, 1000]
 
         for sound in sounds:
             if prev_sound is None:

@@ -28,10 +28,11 @@
 @Date:	05-JUL-2015
 @Time Duration:	10:16:35-10:16:35
 @Bg:	Pause 1
-*SIL:	0 . 0_10
-%xcom:	subregion 1 of 5  (ranked 1 of 5)  starts at 10 -- previous timestamp adjusted: was 800
+*SIL:	0 . 0_800
 %xdb:	average_dB="-38.66" peak_dB="-20.63"
-*NOF:	0 . 800_2460
+*NOF:	0 . 800_1000
+%xcom:	subregion comment rewrote interval to 0_1, rewriting to 800_1000
+%xcom:	subregion 1 of 5  (ranked 1 of 5)  starts at 1000 -- previous timestamp adjusted: was 2460
 %xdb:	average_dB="-38.51" peak_dB="-21.34"
 *CXF:	0 . 2460_3260
 %xdb:	average_dB="-44.50" peak_dB="-38.12"
