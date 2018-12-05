@@ -258,7 +258,7 @@ class ClanFileParser:
                         # else:
                         #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                         #                                                               int(curr_silence.start))))
-
+                        output.write(line)
                         if silence_1000_replaced:
                             output.write("%xcom:\tsilence comment rewrote interval to 0_1, rewriting to 0_1000\n")
                             silence_1000_replaced = False   # reset flag
@@ -301,7 +301,7 @@ class ClanFileParser:
                         # else:
                         #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                         #                                                               int(curr_silence.end))))
-
+                        output.write(line)
                         # then we write the end silence comment right afterwards
                         # UPDATE
                         output.write("%xcom:\tsilence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
@@ -383,7 +383,7 @@ class ClanFileParser:
                         #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                         #                                                               int(curr_silence.start))))
 
-
+                        output.write(line)
                         # insert the comment immediately after the altered clan entry
                         # UPDATE no adjusting
                         output.write("%xcom:\tsilence {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
@@ -422,7 +422,7 @@ class ClanFileParser:
                         # else:
                         #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                         #                                                               int(curr_silence.end))))
-
+                        output.write(line)
                         # then we write the end silence comment right afterwards
                         # UPDATE no adjusting
                         output.write("%xcom:\tsilence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
@@ -950,7 +950,7 @@ class ClanFileParser:
                             # else:
                             #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                             #                                                           int(curr_region_start))))
-
+                            output.write(line)
                             if region_1000_replaced:
                                 output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}"\
                                              .format(current_clan_interval[0], int(curr_region_start)))
@@ -1002,7 +1002,7 @@ class ClanFileParser:
                             # else:
                             #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                             #                                                               int(curr_region_start))))
-
+                            output.write(line)
                             if region_1000_replaced:
                                 output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}\n"\
                                              .format(current_clan_interval[0], int(curr_region_start)))
@@ -1056,7 +1056,7 @@ class ClanFileParser:
                             # else:
                             #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                             #                                                               int(curr_region_end))))
-
+                            output.write(line)
 
                             if curr_region == lowest_region:
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  ends at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
@@ -1123,7 +1123,7 @@ class ClanFileParser:
                             # else:
                             #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                             #                                                               int(curr_region_end))))
-
+                            output.write(line)
 
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  ends at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
@@ -1236,7 +1236,9 @@ class ClanFileParser:
                             #
                             # else:
                             #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                            #                                                               int(curr_region_start))))
+                            #
+                            #                                                           int(curr_region_start))))
+                            output.write(line)
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  starts at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
@@ -1282,7 +1284,7 @@ class ClanFileParser:
                             # else:
                             #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                             #                                                               int(curr_region_start))))
-
+                            output.write(line)
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  starts at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
                                                 .format(region_number,
@@ -1329,7 +1331,7 @@ class ClanFileParser:
                             # else:
                             #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                             #                                                               int(curr_region_end))))
-
+                            output.write(line)
                             if curr_region == lowest_region:
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  ends at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
@@ -1395,7 +1397,7 @@ class ClanFileParser:
                             # else:
                             #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
                             #                                                               int(curr_region_end))))
-
+                            output.write(line)
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  ends at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
                                                 .format(region_number,
