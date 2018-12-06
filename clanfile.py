@@ -952,7 +952,7 @@ class ClanFileParser:
                             #                                                           int(curr_region_start))))
                             output.write(line)
                             if region_1000_replaced:
-                                output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}"\
+                                output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}\n"\
                                              .format(current_clan_interval[0], int(curr_region_start)))
                                 region_1000_replaced = False    # reset flag
 
