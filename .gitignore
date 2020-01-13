@@ -6,4 +6,5 @@ data/export/
 *.DS_Store
 README.md
 *.its
+data/temp
 
